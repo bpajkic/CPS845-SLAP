@@ -1,42 +1,108 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.container {
+  display: flex;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.sidebar {
+  width: 200px;
+  background-color: #6494aa;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.menu,
+.chat-menu {
+  margin-bottom: 20px;
+  background-color: #d6e6f3;
+  padding: 10px;
+  border-radius: 5px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.menu-item,
+.submenu-item {
+  padding: 8px 0;
+  font-weight: bold;
 }
 
-.card {
-  padding: 2em;
+.submenu,
+.chat-submenu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
-.read-the-docs {
-  color: #888;
+.chat-options {
+  list-style-type: none;
+  padding-left: 15px;
+  margin-top: 5px;
+}
+
+.chat-options li {
+  padding: 4px 0;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #d6e6f3;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.logout {
+  background-color: #0d3b66;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background-color: #073159;
+}
+
+.main-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.calendar,
+.slap-notifications {
+  margin-bottom: 15px;
+}
+
+.calendar h2,
+.slap-notifications h2 {
+  margin-top: 0;
+}
+
+.show-more {
+  margin-top: 5px;
+  background-color: transparent;
+  border: none;
+  color: #333;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.chat-box {
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #ccc;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 150px;
 }
