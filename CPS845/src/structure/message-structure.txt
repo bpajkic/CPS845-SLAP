@@ -1,0 +1,34 @@
+course: course_code, [students], [instuctors], [Projects<<object>>], [Course Chat<<object>>]
+
+
+(sending a message)
+    Course Chat: course_code, title, recepient, body. 
+
+             [Chat]
+               |
+[proj c] [course chat] [individual]
+
+
+(* - required) 
+John sends Anne a message:
+
+------------------------------------
+To: Anne, Mike* 
+From: John
+Title: Group Project 
+Course: [   CPS845      ]* 
+
+(*message)
+Anne and Mike do your fkn work bros. 
+Cheers, 
+John
+
+------------------------------------
+
+Anne's  + Mikes System 
+CPS845 
+- Group Project (1)
+
+We will need to check:
+- If all recipents are a part of the course
+- If all required parts of the form are filled (message, recipient, course, title). 
