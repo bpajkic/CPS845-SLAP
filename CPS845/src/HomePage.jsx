@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./HomePage.css";
 
 function HomePage() {
@@ -12,6 +13,11 @@ function HomePage() {
             <li className="submenu-item">class 2</li>
             <li className="submenu-item">class 3</li>
           </ul>
+          <ul>
+          <li>
+            <Link to="/home/ViewCourses">View Courses</Link> {/* Using Link for navigation */}
+          </li>
+        </ul>
         </nav>
         <h2 id="chat">Chat</h2>
         <nav className="chat-menu">
