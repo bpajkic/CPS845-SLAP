@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import supabase from '../supabaseClient';
 import './ViewCoursesPage.css';
 
@@ -32,8 +33,10 @@ function ViewCoursesPage() {
       <ul className="courses-list">
         {courses.map(course => (
           <li key={course.id} className="course-item">
-            <h2>{course.COURSE_CODE}</h2>
-            <p>{course.COURSE_NAME}</p>
+            <Link to={`/courses/${course.id}`} className="course-link">
+              <h2>{course.COURSE_CODE}</h2>
+              <p>{course.COURSE_NAME}</p>
+            </Link>
           </li>
         ))}
       </ul>
