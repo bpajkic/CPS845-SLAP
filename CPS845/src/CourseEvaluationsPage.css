@@ -1,0 +1,20 @@
+.evaluations-page {
+    padding: 20px;
+  }
+  
+  .evaluations-page h1 {
+    color: #333;
+  }
+  
+  .evaluations-page ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .evaluations-page li {
+    background-color: #f7f7f7;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
