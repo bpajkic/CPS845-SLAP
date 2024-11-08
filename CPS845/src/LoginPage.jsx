@@ -56,7 +56,7 @@ function LoginPage() {
       <div>
         <b>
           Bosko was here 😱 <br></br>
-          Dharshini was here too 😱 (testingPurposes) <br></br>
+          Dharshini was here too 😱 <br></br>
           Please use one of the following accounts:
         </b>
         {fetchError && (<p>{fetchError}</p>)}
