@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import supabase from '../supabaseClient';
 import './CourseProjectsPage.css';
 
-function CourseProjectsPage({ courseId }) {
+function CourseProjectsPage() {
+  const { id: courseId } = useParams(); // Get courseId from URL
   const [projects, setProjects] = useState([]);
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectDescription, setNewProjectDescription] = useState('');
   const [fetchError, setFetchError] = useState(null);
   const [submitError, setSubmitError] = useState(null);
 
-  // Fetch projects when the component loads
   useEffect(() => {
     const fetchProjects = async () => {
       const { data, error } = await supabase
@@ -29,7 +30,6 @@ function CourseProjectsPage({ courseId }) {
     fetchProjects();
   }, [courseId]);
 
-  // Function to add a new project
   const handleAddProject = async (e) => {
     e.preventDefault();
     setSubmitError(null);

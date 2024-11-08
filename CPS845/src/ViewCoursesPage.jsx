@@ -10,7 +10,7 @@ function ViewCoursesPage() {
   useEffect(() => {
     const fetchCourses = async () => {
       const { data, error } = await supabase
-        .from('COURSES') // Name of your table in Supabase
+        .from('COURSES') 
         .select();
 
       if (error) {
@@ -37,6 +37,10 @@ function ViewCoursesPage() {
               <h2>{course.COURSE_CODE}</h2>
               <p>{course.COURSE_NAME}</p>
             </Link>
+            {/* Link to the projects page for this course */}
+            <p>
+              <Link to={`/courses/${course.id}/projects`}>View project/assignment details here.</Link>
+            </p>
           </li>
         ))}
       </ul>
