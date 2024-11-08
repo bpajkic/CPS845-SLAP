@@ -39,12 +39,7 @@ function CoursePage() {
             <h3>Projects/Assignments</h3>
             <p>View project/assignment details here.</p>
           </div>
-          
-          <div className="course-section">
-            <h3>Instruction Documents</h3>
-            <p>View instruction documents here.</p>
-          </div>
-          
+                  
           <div className="course-section">
             <h3>Submissions</h3>
             <p>View submissions here.</p>

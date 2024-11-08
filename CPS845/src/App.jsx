@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import LoginPage from './LoginPage';
-import HomePage from './HomePage'; // Rename App content as HomePage
+import HomePage from './HomePage'; 
 import ViewCoursesPage from './ViewCoursesPage';
 import CoursePage from './CoursePage';
 import CourseProjectsPage from './CourseProjectsPage';
