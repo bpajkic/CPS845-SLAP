@@ -34,7 +34,7 @@ function CoursePage() {
   return (
     <div className="course-page">
       <h1>{course.COURSE_NAME}</h1>
-      <p>Instructor: {course.INSTRUCTOR}</p>
+      <p>Course Code: {course.COURSE_CODE}</p>
 
       <div className="course-section">
         <h2>Projects/Assignments</h2>

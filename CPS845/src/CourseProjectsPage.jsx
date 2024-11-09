@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import supabase from '../supabaseClient';
 import './CourseProjectsPage.css';
 
-function CourseProjectsPage({ courseId }) {
+function CourseProjectsPage() {
+  const { id: courseId } = useParams(); // Get the course ID from URL parameters
   const [projects, setProjects] = useState([]);
   const [fetchError, setFetchError] = useState(null);
 
-  // Fetch projects when the component loads
   useEffect(() => {
     const fetchProjects = async () => {
       const { data, error } = await supabase
         .from('PROJECTS')
         .select()
-        .eq('course_id', courseId);
+        .eq('course_id', courseId); // Fetch projects related to the current course
 
       if (error) {
         setFetchError('Could not fetch projects');
@@ -26,12 +27,15 @@ function CourseProjectsPage({ courseId }) {
     fetchProjects();
   }, [courseId]);
 
+  if (fetchError) return <p className="error">{fetchError}</p>;
+  if (!projects.length) return <p>No projects available for this course.</p>;
+
   return (
     <div className="course-projects-page">
       <h1>Projects for Course {courseId}</h1>
-      {fetchError && <p className="error">{fetchError}</p>}
+
       <ul className="project-list">
-        {projects.map(project => (
+        {projects.map((project) => (
           <li key={project.project_id} className="project-item">
             <h2>{project.name}</h2>
             <p>{project.description}</p>
