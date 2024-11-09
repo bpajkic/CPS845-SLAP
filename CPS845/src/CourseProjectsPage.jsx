@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import supabase from '../supabaseClient';
 import './CourseProjectsPage.css';
 
-function CourseProjectsPage() {
-  const { id: courseId } = useParams(); // Get courseId from URL
+function CourseProjectsPage({ courseId }) {
   const [projects, setProjects] = useState([]);
-  const [newProjectName, setNewProjectName] = useState('');
-  const [newProjectDescription, setNewProjectDescription] = useState('');
   const [fetchError, setFetchError] = useState(null);
-  const [submitError, setSubmitError] = useState(null);
 
+  // Fetch projects when the component loads
   useEffect(() => {
     const fetchProjects = async () => {
       const { data, error } = await supabase
@@ -30,32 +26,10 @@ function CourseProjectsPage() {
     fetchProjects();
   }, [courseId]);
 
-  const handleAddProject = async (e) => {
-    e.preventDefault();
-    setSubmitError(null);
-
-    const { data, error } = await supabase
-      .from('PROJECTS')
-      .insert([
-        { course_id: courseId, name: newProjectName, description: newProjectDescription },
-      ]);
-
-    if (error) {
-      setSubmitError('Could not add project');
-      console.error(error);
-    } else {
-      setProjects([...projects, ...data]);
-      setNewProjectName('');
-      setNewProjectDescription('');
-    }
-  };
-
   return (
     <div className="course-projects-page">
       <h1>Projects for Course {courseId}</h1>
-
       {fetchError && <p className="error">{fetchError}</p>}
-
       <ul className="project-list">
         {projects.map(project => (
           <li key={project.project_id} className="project-item">
@@ -64,26 +38,6 @@ function CourseProjectsPage() {
           </li>
         ))}
       </ul>
-
-      <h2>Add New Project</h2>
-      <form onSubmit={handleAddProject} className="project-form">
-        <input
-          type="text"
-          placeholder="Project Name"
-          value={newProjectName}
-          onChange={(e) => setNewProjectName(e.target.value)}
-          required
-        />
-        <textarea
-          placeholder="Project Description"
-          value={newProjectDescription}
-          onChange={(e) => setNewProjectDescription(e.target.value)}
-          required
-        />
-        <button type="submit">Add Project</button>
-      </form>
-
-      {submitError && <p className="error">{submitError}</p>}
     </div>
   );
 }
