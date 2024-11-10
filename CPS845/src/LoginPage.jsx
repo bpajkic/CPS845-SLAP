@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
-import './index.css'
+import './main.css'
 
 //Database Stuff
 import supabase from '../supabaseClient';
