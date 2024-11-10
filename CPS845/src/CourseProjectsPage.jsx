@@ -11,7 +11,7 @@ function CourseProjectsPage() {
   useEffect(() => {
     const fetchProjects = async () => {
       const { data, error } = await supabase
-        .from('PROJECTS')
+        .from('projects')
         .select()
         .eq('course_id', courseId); // Fetch projects related to the current course
 
@@ -38,7 +38,6 @@ function CourseProjectsPage() {
         {projects.map((project) => (
           <li key={project.project_id} className="project-item">
             <h2>{project.name}</h2>
-            <p>{project.description}</p>
           </li>
         ))}
       </ul>

@@ -19,7 +19,7 @@ function App() {
       <Route path="/home" element={<HomePage />} />
       <Route path="/home/ViewCourses" element={<ViewCoursesPage />} />
       <Route path="/courses/:id" element={<CoursePage />} />
-      <Route path="/courses/:id/projects" component={<CourseProjectsPage />} />
+      <Route path="/courses/:id/projects" element={<CourseProjectsPage />} />
       <Route path="/courses/:id/submissions" element={<CourseSubmissionsPage />} />
       <Route path="/courses/:id/evaluations" element={<CourseEvaluationsPage />} />
     </Routes>
