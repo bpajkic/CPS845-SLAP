@@ -4,6 +4,7 @@ import "./HomePage.css";
 function HomePage() {
   return (
     <div className="container">
+      {/* sidebar */}
       <aside className="sidebar">
         <nav className="menu">
           <div className="menu-item">home</div>
@@ -35,6 +36,7 @@ function HomePage() {
           </ul>
         </nav>
       </aside>
+      {/* main */}
       <main className="content">
         <header className="header">
           <h1>SLAP Interface</h1>
@@ -55,10 +57,6 @@ function HomePage() {
             <p>- New Project in class 3</p>
           </div>
         </section>
-        <div className="chat-box">
-          <h3>John Doe</h3>
-          <p>Hi</p>
-        </div>
       </main>
     </div>
   );

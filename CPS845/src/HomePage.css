@@ -1,5 +1,7 @@
 .container {
-    display: flex;
+  display: flex;
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Hide any overflow for a cleaner layout */
   }
   
   .sidebar {
