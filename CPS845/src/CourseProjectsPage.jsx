@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import supabase from '../supabaseClient';
 import './CourseProjectsPage.css';
 
@@ -37,8 +38,10 @@ function CourseProjectsPage() {
       <ul className="project-list">
         {projects.map((project) => (
           <li key={project.project_id} className="project-item">
-            <h2>{project.name}</h2>
-          </li>
+            <Link to={`/courses/${courseId}/projects/${project.project_id}`}>
+                <h2>{project.name}</h2>
+            </Link>
+        </li>
         ))}
       </ul>
     </div>

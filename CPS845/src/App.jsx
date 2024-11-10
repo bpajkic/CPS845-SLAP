@@ -7,6 +7,7 @@ import CoursePage from './CoursePage';
 import CourseProjectsPage from './CourseProjectsPage';
 import CourseSubmissionsPage from './CourseSubmissionsPage';
 import CourseEvaluationsPage from './CourseEvaluationsPage';
+import ProjectInstructions from './ProjectInstructions';
 
 import './App.css';
 
@@ -20,6 +21,7 @@ function App() {
       <Route path="/home/ViewCourses" element={<ViewCoursesPage />} />
       <Route path="/courses/:id" element={<CoursePage />} />
       <Route path="/courses/:id/projects" element={<CourseProjectsPage />} />
+      <Route path="/courses/:id/projects/:project_id" element={<ProjectInstructions />} />
       <Route path="/courses/:id/submissions" element={<CourseSubmissionsPage />} />
       <Route path="/courses/:id/evaluations" element={<CourseEvaluationsPage />} />
     </Routes>
