@@ -74,7 +74,7 @@ function LoginPage() {
         <h2>Login</h2>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Slap ID"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
