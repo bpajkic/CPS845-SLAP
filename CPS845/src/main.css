@@ -233,3 +233,10 @@ h2, h3, h4 {
     text-decoration: underline;
   }
   
+
+  .admin-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  

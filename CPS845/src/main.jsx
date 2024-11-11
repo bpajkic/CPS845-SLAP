@@ -10,6 +10,7 @@ import CourseProjectsPage from './CourseProjectsPage';
 import CourseSubmissionsPage from './CourseSubmissionsPage';
 import CourseEvaluationsPage from './CourseEvaluationsPage';
 import ProjectInstructions from './ProjectInstructions';
+import Admin from './Admin';
 import './main.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -24,6 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/courses/:id/projects/:project_id" element={<ProjectInstructions />} />
         <Route path="/courses/:id/submissions" element={<CourseSubmissionsPage />} />
         <Route path="/courses/:id/evaluations" element={<CourseEvaluationsPage />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
