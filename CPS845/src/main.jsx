@@ -10,11 +10,9 @@ import CourseProjectsPage from './CourseProjectsPage';
 import CourseSubmissionsPage from './CourseSubmissionsPage';
 import CourseEvaluationsPage from './CourseEvaluationsPage';
 import ProjectInstructions from './ProjectInstructions';
-<<<<<<< HEAD
 import Admin from './Admin';
-=======
 import ResetPassword from './ResetPassword';
->>>>>>> 8f93eef101ec39b150cafc11569b71cde9443a4c
+
 import './main.css';
 
 
@@ -30,11 +28,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/courses/:id/projects/:project_id" element={<ProjectInstructions />} />
         <Route path="/courses/:id/submissions" element={<CourseSubmissionsPage />} />
         <Route path="/courses/:id/evaluations" element={<CourseEvaluationsPage />} />
-<<<<<<< HEAD
         <Route path="/admin" element={<Admin />} />
-=======
         <Route path="/reset-password" element={<ResetPassword />} />
->>>>>>> 8f93eef101ec39b150cafc11569b71cde9443a4c
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
