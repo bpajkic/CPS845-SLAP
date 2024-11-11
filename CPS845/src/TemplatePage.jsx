@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
+import supabase from '../supabaseClient';
 import "./main.css";
 
 function TemplatePage({ children }) {
@@ -6,6 +8,30 @@ function TemplatePage({ children }) {
   const handleLogout = () => {
     navigate("/"); // Redirect to the login page
   };
+
+  //Fetching Courses
+  const [courses, setCourses] = useState([]);
+  const [fetchError, setFetchError] = useState(null);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      const { data, error } = await supabase
+        .from('COURSES') 
+        .select();
+
+      if (error) {
+        setFetchError('Could not fetch courses');
+        setCourses([]);
+        console.error(error);
+      } else {
+        setCourses(data);
+        setFetchError(null);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
 
   return (
     <div className="container">
@@ -21,9 +47,15 @@ function TemplatePage({ children }) {
             <li className="submenu-item">
               <Link to="/home/ViewCourses">View Courses</Link>
             </li>
-            <li className="submenu-item">class 1</li>
-            <li className="submenu-item">class 2</li>
-            <li className="submenu-item">class 3</li>
+
+            {/* List of Courses for the Side Menu */}
+            {fetchError && <p className="error">{fetchError}</p>}
+            {courses.map(course => (
+                <li key={course.id} className="submenu-item">
+                <Link to={`/courses/${course.id}`}>{course.COURSE_CODE}</Link>
+              </li>
+            ))}
+
           </ul>
         </nav>
         <h2 id="chat">Chat</h2>
