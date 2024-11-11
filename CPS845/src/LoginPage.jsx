@@ -9,6 +9,7 @@ function LoginPage() {
   //Fetching Users
   const [fetchError, setFetchError] = useState(null);
   const [users, setUsers] = useState(null);
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -33,6 +34,8 @@ function LoginPage() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const[message,setMessage] = useState('');
+  const[error,setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -44,6 +47,31 @@ function LoginPage() {
       alert("Please enter both username and password.");
     }
   };
+
+  const handleForgotPassword = async () => {
+    setMessage('');
+    setError('');
+
+    // Check if email is provided
+    if (!email) {
+      setError('Please enter your email address.');
+      return;
+    }
+
+    // Call Supabase's password reset function
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:3000/reset-password', // Customize this URL
+    });
+
+    // Show success or error messages
+    if (error) {
+      setError(error.message);
+    } else {
+      setMessage('Password reset link sent! Please check your email.');
+    }
+  };
+
+  
 
   return (
     <div>
@@ -84,6 +112,12 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Login</button>
+        <button onClick={handleForgotPassword}>Forgot Password</button>
+        {message && <p style={{ color: 'green' }}>{message}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+        
+         
       </div>
     </div>
   );
