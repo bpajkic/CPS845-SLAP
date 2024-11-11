@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import supabase from '../supabaseClient';
+import TemplatePage from "./TemplatePage";
 import './main.css';
 
 function CourseSubmissionsPage() {
@@ -28,6 +29,7 @@ function CourseSubmissionsPage() {
   }, [id]);
 
   return (
+    <TemplatePage>
     <div className="submissions-page">
       <h1>Submissions for Course {id}</h1>
       {fetchError && <p className="error">{fetchError}</p>}
@@ -41,6 +43,7 @@ function CourseSubmissionsPage() {
         ))}
       </ul>
     </div>
+    </TemplatePage>
   );
 }
 

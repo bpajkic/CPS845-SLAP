@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import supabase from '../supabaseClient';
+import TemplatePage from "./TemplatePage";
 import './main.css';
 
 function CoursePage() {
@@ -32,7 +33,8 @@ function CoursePage() {
   if (!course) return <p>Loading...</p>;
 
   return (
-    <div className="course-page">
+    <TemplatePage>
+      <div className="course-page">
       <h1>{course.COURSE_NAME}</h1>
       <p>Course Code: {course.COURSE_CODE}</p>
 
@@ -57,6 +59,7 @@ function CoursePage() {
         </p>
       </div>
     </div>
+    </TemplatePage>
   );
 }
 

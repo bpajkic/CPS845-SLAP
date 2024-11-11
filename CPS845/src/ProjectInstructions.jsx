@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import supabase from '../supabaseClient';
+import TemplatePage from "./TemplatePage";
 import './main.css';
 
 function ProjectInstructions() {
@@ -32,10 +33,12 @@ function ProjectInstructions() {
   if (!project) return <p>Loading project details...</p>;
 
   return (
+    <TemplatePage>
     <div className="project-instructions">
       <h3>{project.name}</h3>
       <p>{project.description}</p>
     </div>
+    </TemplatePage>
   );
 }
 

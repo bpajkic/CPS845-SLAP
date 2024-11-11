@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import supabase from '../supabaseClient';
+import TemplatePage from "./TemplatePage";
 import './main.css';
 
 function CourseProjectsPage() {
@@ -32,6 +33,7 @@ function CourseProjectsPage() {
   if (!projects.length) return <p>No projects available for this course.</p>;
 
   return (
+    <TemplatePage>
     <div className="course-projects-page">
       <h1>Projects for Course {courseId}</h1>
 
@@ -45,6 +47,7 @@ function CourseProjectsPage() {
         ))}
       </ul>
     </div>
+    </TemplatePage>
   );
 }
 

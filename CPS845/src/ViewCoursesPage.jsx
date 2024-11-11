@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import supabase from '../supabaseClient';
+import TemplatePage from "./TemplatePage";
 import './main.css';
 
 function ViewCoursesPage() {
@@ -27,6 +28,7 @@ function ViewCoursesPage() {
   }, []);
 
   return (
+    <TemplatePage>
     <div className="view-courses-container">
       <h1>Available Courses</h1>
       {fetchError && <p className="error">{fetchError}</p>}
@@ -41,6 +43,7 @@ function ViewCoursesPage() {
         ))}
       </ul>
     </div>
+    </TemplatePage>
   );
 }
 
