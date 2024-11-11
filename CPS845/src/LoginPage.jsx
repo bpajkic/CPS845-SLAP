@@ -10,6 +10,7 @@ function LoginPage() {
   const [fetchError, setFetchError] = useState(null);
   const [users, setUsers] = useState(null);
   
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -36,6 +37,8 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const[message,setMessage] = useState('');
   const[error,setError] = useState('');
+  const[email,setEmail] = useState('');
+  const[showEmailInput, setShowEmailInput] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -48,30 +51,33 @@ function LoginPage() {
     }
   };
 
-  const handleForgotPassword = async () => {
+  const handleForgotPasswordClick = () => {
+    // Show the email input field
+    setShowEmailInput(true);
+    setMessage('');
+    setError('');
+  };
+
+  const handleSendResetLink = async (e) => {
+    e.preventDefault();
     setMessage('');
     setError('');
 
-    // Check if email is provided
-    if (!email) {
-      setError('Please enter your email address.');
-      return;
-    }
-
-    // Call Supabase's password reset function
+    // Send password reset email using Supabase
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:3000/reset-password', // Customize this URL
+      redirectTo: 'http://localhost:5173/reset-password', // Adjust this URL to your reset password page
     });
 
-    // Show success or error messages
     if (error) {
       setError(error.message);
     } else {
       setMessage('Password reset link sent! Please check your email.');
+      setShowEmailInput(false); // Hide the input field after sending the email
     }
   };
 
-  
+
+
 
   return (
     <div>
@@ -112,9 +118,22 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Login</button>
-        <button onClick={handleForgotPassword}>Forgot Password</button>
+        {!showEmailInput && (<button onClick={handleForgotPasswordClick}>Forgot Password</button>)}
+        {showEmailInput && (
+        <form onSubmit={handleSendResetLink}>
+          <label>
+            Enter your email:
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <button type="submit">Send Reset Link</button>
+        </form>)}
         {message && <p style={{ color: 'green' }}>{message}</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
 
         
          
