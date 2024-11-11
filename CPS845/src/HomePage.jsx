@@ -1,7 +1,18 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link,useNavigate } from "react-router-dom";
 import './main.css';
+import React from "react";
 
 function HomePage() {
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+   
+      navigate("/"); // Redirect to the login page
+  
+  };
+
+  
   return (
     <div className="container">
       {/* sidebar */}
@@ -40,7 +51,7 @@ function HomePage() {
       <main className="content">
         <header className="header">
           <h1>SLAP Interface</h1>
-          <button className="logout">LOGOUT</button>
+          <button className = "logout" onClick={handleLogout}>LOGOUT</button>
         </header>
         <h4>Gould Street University</h4>
         <section className="main-content">

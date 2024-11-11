@@ -9,6 +9,8 @@ function LoginPage() {
   //Fetching Users
   const [fetchError, setFetchError] = useState(null);
   const [users, setUsers] = useState(null);
+  
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -33,6 +35,10 @@ function LoginPage() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const[message,setMessage] = useState('');
+  const[error,setError] = useState('');
+  const[email,setEmail] = useState('');
+  const[showEmailInput, setShowEmailInput] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -44,6 +50,34 @@ function LoginPage() {
       alert("Please enter both username and password.");
     }
   };
+
+  const handleForgotPasswordClick = () => {
+    // Show the email input field
+    setShowEmailInput(true);
+    setMessage('');
+    setError('');
+  };
+
+  const handleSendResetLink = async (e) => {
+    e.preventDefault();
+    setMessage('');
+    setError('');
+
+    // Send password reset email using Supabase
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:5173/reset-password', // Adjust this URL to your reset password page
+    });
+
+    if (error) {
+      setError(error.message);
+    } else {
+      setMessage('Password reset link sent! Please check your email.');
+      setShowEmailInput(false); // Hide the input field after sending the email
+    }
+  };
+
+
+
 
   return (
     <div>
@@ -84,6 +118,25 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Login</button>
+        {!showEmailInput && (<button onClick={handleForgotPasswordClick}>Forgot Password</button>)}
+        {showEmailInput && (
+        <form onSubmit={handleSendResetLink}>
+          <label>
+            Enter your email:
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <button type="submit">Send Reset Link</button>
+        </form>)}
+        {message && <p style={{ color: 'green' }}>{message}</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+
+        
+         
       </div>
     </div>
   );
