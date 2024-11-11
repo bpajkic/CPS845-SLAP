@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import supabase from '../supabaseClient';
-import './CourseProjectsPage.css';
+import './main.css';
 
 function CourseProjectsPage() {
   const { id: courseId } = useParams(); // Get the course ID from URL parameters

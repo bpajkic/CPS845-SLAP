@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import supabase from '../supabaseClient';
-import './ProjectInstructions.css';
+import './main.css';
 
 function ProjectInstructions() {
   const { id: courseId, project_id: projectId } = useParams(); // Get course ID and project ID from URL parameters

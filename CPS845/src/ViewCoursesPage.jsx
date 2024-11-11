@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import supabase from '../supabaseClient';
-import './ViewCoursesPage.css';
+import './main.css';
 
 function ViewCoursesPage() {
   const [courses, setCourses] = useState([]);

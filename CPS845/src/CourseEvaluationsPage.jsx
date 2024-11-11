@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import supabase from '../supabaseClient';
-import './CourseEvaluationsPage.css';
+import './main.css';
 
 function CourseEvaluationsPage() {
   const { id } = useParams();

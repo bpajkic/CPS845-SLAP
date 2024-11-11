@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import "./HomePage.css";
+import './main.css';
 
 function HomePage() {
   return (
