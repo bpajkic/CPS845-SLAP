@@ -12,9 +12,9 @@ import CourseEvaluationsPage from './CourseEvaluationsPage';
 import ProjectInstructions from './ProjectInstructions';
 import Admin from './Admin';
 import ResetPassword from './ResetPassword';
+import SendMessage from './sendMessage';
 
 import './main.css';
-
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -30,6 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/courses/:id/evaluations" element={<CourseEvaluationsPage />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/sendMessage" element={<SendMessage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

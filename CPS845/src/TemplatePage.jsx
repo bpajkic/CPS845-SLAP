@@ -9,6 +9,10 @@ function TemplatePage({ children }) {
     navigate("/"); // Redirect to the login page
   };
 
+  const handleSendMessage = () => {
+    navigate("/sendMessage"); // Navigate to the SendMessage form page
+  };
+
   //Fetching Courses
   const [courses, setCourses] = useState([]);
   const [fetchError, setFetchError] = useState(null);
@@ -80,6 +84,7 @@ function TemplatePage({ children }) {
               <li className="submenu-item">class 3</li>
             </ul>
           </nav>
+          <button className="send-message" onClick={handleSendMessage}>Send Message</button>
         </aside>
         {/* main */}
         <main className="content">
