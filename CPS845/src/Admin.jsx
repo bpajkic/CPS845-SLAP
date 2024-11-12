@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import supabase from '../supabaseClient';
+import CreateSLAP from "./CreateSLAP";
 import "./main.css";
 
 const Admin = () => {
@@ -292,9 +293,7 @@ const Admin = () => {
   // SLAPs Management Component
   const SlapsManagement = () => (
     <div>
-      <h1>SLAPs Management</h1>
-      <p className="main-content">Manage SLAPs here. Add specific SLAPs functionalities as needed.</p>
-      {/* Add SLAPs management functionality here */}
+      <CreateSLAP admin={true}/>
     </div>
   );
 

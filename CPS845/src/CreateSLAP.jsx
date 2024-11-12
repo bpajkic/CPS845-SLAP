@@ -3,7 +3,7 @@ import supabase from '../supabaseClient';
 import TemplatePage from "./TemplatePage";
 import './main.css';
 
-function CreateSLAP() {
+function CreateSLAP({ admin }) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [courses, setCourses] = useState([]);
@@ -70,9 +70,9 @@ function CreateSLAP() {
         }
     };
 
-    return (
-        <TemplatePage>
-            <div className="create-slap-container">
+    const slapTemplate = () => {
+        return (
+        <div className="create-slap-container">
                 <h1>Create New SLAPs</h1>
 
                 <h3>Title</h3>
@@ -104,8 +104,24 @@ function CreateSLAP() {
 
                 {status && <p className="status">{status}</p>}
             </div>
-        </TemplatePage>
-    );
+
+        );
+    }
+
+    if (admin) {
+        return (
+            <>
+                { slapTemplate() }
+            </>  
+        );
+    } else {
+        return (
+            <TemplatePage>
+                { slapTemplate() }
+            </TemplatePage>
+        );
+    }
+    
 }
 
 export default CreateSLAP;

@@ -127,6 +127,7 @@ function TemplatePage({ children }) {
   // Redirect to Admin Page if User is Admin
   if (accountType === "admin") {
     navigate("/admin");
+    return false;
   }
 
   return (
