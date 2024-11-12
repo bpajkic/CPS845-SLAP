@@ -49,7 +49,7 @@ function LoginPage() {
     try {
       const { data, error } = await supabase
         .from("USERS")
-        .select("id, EMAIL, USER_NAME")
+        .select("id, EMAIL, USER_NAME, FIRST_NAME, LAST_NAME")
         .eq("USER_NAME", username)
         .eq("PASSWORD", password)
         .single();
@@ -62,7 +62,7 @@ function LoginPage() {
         const fullName = `${data.FIRST_NAME} ${data.LAST_NAME}`;
   
         // Store the logged-in user's email in localStorage
-        localStorage.setItem("loggedInUser", JSON.stringify({ id: data.id, fullName}));
+        localStorage.setItem("loggedInUser", JSON.stringify({ id: data.id, fullName, email: data.EMAIL}));
   
         // Navigate to the homepage
         navigate("/home");
