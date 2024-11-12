@@ -253,7 +253,7 @@ h2, h4 {
     margin: 0;
   }
   
-  .course-page, .course-projects-page, .project-instructions, .evaluations-page, .submissions-page, .view-courses-container, .create-slap-container, .create-project-container {
+  .course-page, .course-projects-page, .project-instructions, .evaluations-page, .submissions-page, .view-courses-container, .create-slap-container, .create-project-container, .edit-project-container {
     padding: 20px;
     max-width: 800px;
     margin: 0 auto;
@@ -468,7 +468,7 @@ textarea {
   font-weight: bold;
 }
 
-.create-slap-container button, .create-project-container button {
+.create-slap-container button, .create-project-container button, .project-instructions button, .edit-project-container button {
   background-color: #0d3b66;
   color: white;
   padding: 10px;
@@ -496,4 +496,9 @@ th, td {
 
 th {
   background-color: #f2f2f2; /* Optional: adds background color to headers */
+}
+
+.edit {
+  color: white;
+  text-decoration: none;
 }
