@@ -36,29 +36,52 @@ const Admin = () => {
   const [submenuVisibility, setSubmenuVisibility] = useState(1);
 
   // Sidebar Component
-  const SidebarAndTemplate = () => (
-    <div className="sidebar">
-      <h2>Admin Dashboard</h2>
-      <nav className="menu">
-        <ul>
-          <li className="submenu-item">
-            <Link onClick={() => setSubmenuVisibility(1)}>Dashboard</Link>
-          </li>
-          <li className="submenu-item">
-            <Link onClick={() => setSubmenuVisibility(2)}>User Management</Link>
-          </li>
-          <li className="submenu-item">
-            <Link onClick={() => setSubmenuVisibility(3)}>Course Management</Link>
-          </li>
-          <li className="submenu-item">
-            <Link onClick={() => setSubmenuVisibility(4)}>SLAPs Management</Link>
-          </li>
-          <li className="submenu-item">
-            <Link onClick={() => setSubmenuVisibility(5)}>Contacts</Link>
-          </li>
-        </ul>
-      </nav>
+  const SidebarAndTemplate = ({ children }) => (
+    <div>
+      <header className="header">
+        <div className="title">
+          <h1>SLAP Interface</h1>
+          <h3>Gould Street University</h3>
+        </div>
+        <div className="account-details">
+          <button className="logout" onClick={handleLogout}>
+            LOGOUT
+          </button>
+        </div>
+      </header>
+      <div className="container">
+        {/* sidebar */}
+        <aside className="sidebar">
+          <h2>Menu</h2>
+          <nav className="menu">
+            <ul className="submenu"></ul>
+            <ul>
+            <li className="submenu-item">
+              <Link onClick={() => setSubmenuVisibility(1)}>Dashboard</Link>
+            </li>
+            <li className="submenu-item">
+              <Link onClick={() => setSubmenuVisibility(2)}>User Management</Link>
+            </li>
+            <li className="submenu-item">
+              <Link onClick={() => setSubmenuVisibility(3)}>Course Management</Link>
+            </li>
+            <li className="submenu-item">
+              <Link onClick={() => setSubmenuVisibility(4)}>SLAPs Management</Link>
+            </li>
+            <li className="submenu-item">
+              <Link onClick={() => setSubmenuVisibility(5)}>Contacts</Link>
+            </li>
+            </ul>
+          </nav>
+        </aside>
+        {/* main */}
+        <main className="content">
+            {/* MAIN CONTENT GOES HERE */}
+            {children}
+          </main>
+      </div>
     </div>
+    
   );
 
   // Dashboard Component
@@ -82,6 +105,7 @@ const Admin = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    const [resetPasswordUsername, setResetPasswordUsername] = useState("");
 
     const handleUserRegistration = () => {
       
@@ -98,9 +122,25 @@ const Admin = () => {
       }
     };
 
+    const generateRandomPassword = (length = 8) => {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+      let password = '';
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        password += characters[randomIndex];
+      }
+      return password;
+    };
+
     const handlePasswordReset = () => {
-      console.log(`Resetting password for: ${username}`);
-      setUsername("");
+      const newPassword = generateRandomPassword();
+      if (resetPasswordUsername) {
+        console.log(`Resetting password for: ${resetPasswordUsername}`);
+        alert(`Password Reset To: ${newPassword}`);
+        setResetPasswordUsername("");
+      } else {
+        alert("Please all required information");
+      }
     };
 
     return (
@@ -134,9 +174,9 @@ const Admin = () => {
                 onChange={(e) => setAccountType(e.target.value)}
               >
                 <option value="">Select Account Type</option>
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
-                <option value="guest">Guest</option>
+                <option value="admin">Student</option>
+                <option value="user">Instructor</option>
+                <option value="guest">Admin</option>
               </select>
           </div>
           <div>
@@ -165,8 +205,8 @@ const Admin = () => {
           <input
             type="text"
             placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={resetPasswordUsername}
+            onChange={(e) => setResetPasswordUsername(e.target.value)}
           />
           <button onClick={handlePasswordReset}>Reset Password</button>
         </div>
@@ -178,11 +218,25 @@ const Admin = () => {
   const CourseManagement = () => {
     const [courseName, setCourseName] = useState("");
     const [courseCode, setCourseCode] = useState("");
+    const [courseDescription, setCourseDescription] = useState("");
+    const [enrollmentDeadline, setEnrollmentDeadline] = useState("");
+    const [courseStartDate, setCourseStartDate] = useState("");
+    const [courseEndDate, setCourseEndDate] = useState("");
 
     const handleCreateCourse = () => {
-      console.log(`Creating course: ${courseName} (${courseCode})`);
-      setCourseName("");
-      setCourseCode("");
+      if (courseName && courseCode && courseDescription && enrollmentDeadline && courseStartDate && courseEndDate) {
+        console.log(`Creating course: ${courseName} ${courseCode}`);
+        alert(`Created course: ${courseName} ${courseCode}`);
+        setCourseName("");
+        setCourseCode("");
+        setCourseDescription("");
+        setEnrollmentDeadline("");
+        setCourseStartDate("");
+        setCourseEndDate("");
+      } else {
+        alert("Please all required information");
+      }
+      
     };
 
     return (
@@ -201,6 +255,33 @@ const Admin = () => {
             placeholder="Course Code"
             value={courseCode}
             onChange={(e) => setCourseCode(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Course Description"
+            value={courseDescription}
+            onChange={(e) => setCourseDescription(e.target.value)}
+          />
+          <p>Enrollment Deadline</p>
+          <input
+            type="date"
+            placeholder="Enrollment Deadline"
+            value={enrollmentDeadline}
+            onChange={(e) => setEnrollmentDeadline(e.target.value)}
+          />
+          <p>Course Start Date</p>
+          <input
+            type="date"
+            placeholder="Course Start Date"
+            value={courseStartDate}
+            onChange={(e) => setCourseStartDate(e.target.value)}
+          />
+          <p>Course End Date</p>
+          <input
+            type="date"
+            placeholder="Course End Date"
+            value={courseEndDate}
+            onChange={(e) => setCourseEndDate(e.target.value)}
           />
           <button onClick={handleCreateCourse}>Create Course</button>
         </div>
@@ -222,12 +303,25 @@ const Admin = () => {
     <div>
       <h1>Contacts</h1>
       <div className="main-content">
-        <h2>Manage contact requests and communication with users here.</h2>
-        {users.map((user) => (
-          <p key={user.id}>
-            Username: {user.USER_NAME} Password: {user.PASSWORD}
-          </p>
-        ))}
+        <h2>Manage reorganize contacts here.</h2>
+        {fetchError && <p className="error">Could Not Fetch Users</p>}
+        <table>
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Password</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.USER_NAME}</td>
+                <td>{user.PASSWORD}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
       </div>
     </div>
   );
@@ -250,21 +344,7 @@ const Admin = () => {
   };
 
   return (
-    <div className="admin-container">
-      <SidebarAndTemplate />
-      <div className="content">
-      <header className="header">
-        <h1>SLAP Interface</h1>
-        <button className="logout" onClick={handleLogout}>
-          LOGOUT
-        </button>
-      </header>
-      <h4>Gould Street University</h4>
-
-      {renderContent()}
-
-      </div>
-    </div>
+      <SidebarAndTemplate>{renderContent()}</SidebarAndTemplate>
   );
 };
 
