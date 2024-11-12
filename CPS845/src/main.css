@@ -482,3 +482,18 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Merges borders for a cleaner look */
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2; /* Optional: adds background color to headers */
+}

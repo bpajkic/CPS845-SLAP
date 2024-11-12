@@ -103,25 +103,30 @@ function LoginPage() {
 
   return (
     <div>
-      {/* BoskoTesting */}
       <div>
         <b>
-          Bosko was here 😱 <br></br>
-          Dharshini was here too 😱 <br></br>
-          Please use one of the following accounts:
+          Account Examples:
         </b>
-        {fetchError && <p>{fetchError}</p>}
-        {users && (
-          <div className="users">
+        {users && <table>
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Password</th>
+              <th>Account Type</th>
+            </tr>
+          </thead>
+          <tbody>
             {users.map((user) => (
-              <p>
-                Username: {user.USER_NAME} Password: {user.PASSWORD}
-              </p>
+              <tr key={user.id}>
+                <td>{user.USER_NAME}</td>
+                <td>{user.PASSWORD}</td>
+                <td>{user.ACCOUNT_TYPE}</td>
+              </tr>
             ))}
-          </div>
-        )}
+          </tbody>
+        </table>}
+        
       </div>
-      {/* BoskoTestingEnd */}
 
       <h1>SLAP</h1>
       <h4>Gould Street University</h4>

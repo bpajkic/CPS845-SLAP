@@ -299,32 +299,76 @@ const Admin = () => {
   );
 
   // Contacts Component
-  const Contacts = () => (
-    <div>
-      <h1>Contacts</h1>
-      <div className="main-content">
-        <h2>Manage reorganize contacts here.</h2>
-        {fetchError && <p className="error">Could Not Fetch Users</p>}
-        <table>
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Password</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.USER_NAME}</td>
-                <td>{user.PASSWORD}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+  const Contacts = () => {
+    const [sortedUsers, setSortedUsers] = useState(users);
+    const [isSortedAsc, setIsSortedAsc] = useState(true);
+    const [sortingColumn, setSortingColumn] = useState("firstName");
+  
+    const handleSortByFirstName = () => {
+      const sortedArray = [...sortedUsers].sort((a, b) => {
+        if (a.FIRST_NAME < b.FIRST_NAME) return isSortedAsc ? -1 : 1;
+        if (a.FIRST_NAME > b.FIRST_NAME) return isSortedAsc ? 1 : -1;
+        return 0;
+      });
+  
+      setSortedUsers(sortedArray);
+      setIsSortedAsc(!isSortedAsc); // Toggle sorting direction
+      setSortingColumn("firstName");
+    };
 
-      </div>
-    </div>
-  );
+
+    const handleSortByLastName = () => {
+      const sortedArray = [...sortedUsers].sort((a, b) => {
+        if (a.LAST_NAME < b.LAST_NAME) return isSortedAsc ? -1 : 1;
+        if (a.LAST_NAME > b.LAST_NAME) return isSortedAsc ? 1 : -1;
+        return 0;
+      });
+  
+      setSortedUsers(sortedArray);
+      setIsSortedAsc(!isSortedAsc); // Toggle sorting direction
+      setSortingColumn("lastName");
+    };
+
+    const handleSortByAccountType = () => {
+      const sortedArray = [...sortedUsers].sort((a, b) => {
+        if (a.ACCOUNT_TYPE < b.ACCOUNT_TYPE) return isSortedAsc ? -1 : 1;
+        if (a.ACCOUNT_TYPE > b.ACCOUNT_TYPE) return isSortedAsc ? 1 : -1;
+        return 0;
+      });
+  
+      setSortedUsers(sortedArray);
+      setIsSortedAsc(!isSortedAsc); // Toggle sorting direction
+      setSortingColumn("accountType");
+    };
+
+    
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th onClick={handleSortByFirstName} style={{ cursor: "pointer" }}>
+              First Name {sortingColumn === "firstName" ? (isSortedAsc ? "↑" : "↓") : "-" }
+            </th>
+            <th onClick={handleSortByLastName} style={{ cursor: "pointer" }}>
+              Last Name {sortingColumn === "lastName" ? (isSortedAsc ? "↑" : "↓") : "-" }
+            </th>
+            <th onClick={handleSortByAccountType} style={{ cursor: "pointer" }}>
+              Account Type {sortingColumn === "accountType" ? (isSortedAsc ? "↑" : "↓") : "-" }
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedUsers.map((user) => (
+            <tr key={user.id}>
+              <td>{user.FIRST_NAME}</td>
+              <td>{user.LAST_NAME}</td>
+              <td>{user.ACCOUNT_TYPE}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
 
   const renderContent = () => {
     switch (submenuVisibility) {
