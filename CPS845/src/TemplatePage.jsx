@@ -18,6 +18,7 @@ function TemplatePage({ children }) {
   const [fetchError, setFetchError] = useState(null);
   const [messages, setMessages] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const [accountType, setAccountType] = useState(null);
 
   // Get logged-in user from localStorage
   useEffect(() => {
@@ -26,6 +27,26 @@ function TemplatePage({ children }) {
       setLoggedInUser(user);
     }
   }, []);
+
+  //Fetches user's account type
+  useEffect(() => {
+    const fetchAccountType = async () => {
+      if (!loggedInUser) return;
+
+      const { data, error } = await supabase
+        .from("USERS")
+        .select("ACCOUNT_TYPE")
+        .eq("id", loggedInUser.id);
+
+      if (error) {
+        console.error("Could not fetch account type", error);
+        setAccountType(null);
+      } else {
+        setAccountType(data?.ACCOUNT_TYPE);
+      }
+    }
+    fetchAccountType();
+  });
 
   // Fetch courses
   useEffect(() => {
@@ -166,6 +187,15 @@ function TemplatePage({ children }) {
           <button className="send-message" onClick={handleSendMessage}>
             Send Message
           </button>
+          {/*Needs to be instructor view only*/}
+            <h2 id="options">Options</h2>
+            <nav className="option-menu">
+            <ul className="option-submenu">
+              <li>
+                <Link to="/home/CreateSLAP">Create New SLAP</Link>
+              </li>
+            </ul>
+            </nav>
         </aside>
         {/* main */}
         <main className="content">

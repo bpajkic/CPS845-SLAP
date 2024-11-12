@@ -192,13 +192,13 @@ h2, h4 {
 
 
   /* Menus and Lists */
-  .menu, .chat-menu, .chat-options, .submenu, .chat-submenu, ul {
+  .menu, .chat-menu, .chat-options, .submenu, .chat-submenu, .option-menu, .option-submenu, ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
   }
   
-  .menu, .chat-menu {
+  .menu, .chat-menu, .option-menu, .option-submenu {
     background-color: #d6e6f3;
     padding: 10px;
     margin-bottom: 20px;
@@ -253,7 +253,7 @@ h2, h4 {
     margin: 0;
   }
   
-  .course-page, .course-projects-page, .project-instructions, .evaluations-page, .submissions-page, .view-courses-container {
+  .course-page, .course-projects-page, .project-instructions, .evaluations-page, .submissions-page, .view-courses-container, .create-slap-container {
     padding: 20px;
     max-width: 800px;
     margin: 0 auto;
@@ -467,3 +467,17 @@ textarea {
   color: red;
   font-weight: bold;
 }
+  .create-slap-container button {
+    background-color: #0d3b66;
+    color: white;
+    padding: 10px;
+    border: none;
+  }
+
+  .create-slap-container input, .create-slapcontainer textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
