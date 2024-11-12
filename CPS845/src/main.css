@@ -1,5 +1,7 @@
-/* Global Reset and Styling */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 * {
+  font-family: "Poppins", sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -12,21 +14,40 @@ html, body, #root {
   background-color: #f4f4f9;
 }
   
-h1 {
-  font-family: 'Times New Roman', Times, serif;
-  color: #0d3b66;
+
+.title h1 {
+  font-weight: 700;
+  font-style: normal;
+  font-size: 40px;
+  color: white;
   text-align: center;
-  padding-top: 50px;
 }
 
-h2, h3, h4 {
-  font-family: 'Times New Roman', Times, serif;
-  color: #005bbb;
+
+
+
+h1 {
+  font-weight: 700;
+  font-style: normal;
+  font-size: 40px;
+  color: #0047ab;
+  text-align: center;
+}
+
+h3 {
+  font-weight: 400;
+  font-size: 25px;
+  font-style: italic;
+  color: #ffc609;
+}
+
+h2, h4 {
+  font-family: "Poppins", sans-serif;
+  color: #253C78;
   text-align: center;
   font-size: 20px;
   padding-bottom: 20px;
 }
-
 
 /* Layout Containers */
 .container {
@@ -35,13 +56,30 @@ h2, h3, h4 {
   overflow: hidden; /* Hide any overflow for a cleaner layout */
 }
 
+.title {
+  padding: 10px;
+  padding-left: 20px;
+  text-align: left;
+}
 
 .sidebar {
   width: 200px;
-  background-color: #6494aa;
-  padding: 10px;
+  background-color: #f4f4f9;
+  height: 100%;
   display: flex;
+  overflow-x: hidden;
   flex-direction: column;
+  padding: 10px;
+  transition: all 0.4s ease;
+}
+
+.sidebar:hover {
+  width: 300px; 
+}
+
+.sidebar .sidebar-header {
+  display: flex;
+  align-items: center;
 }
 
 .content {
@@ -57,10 +95,12 @@ h2, h3, h4 {
   justify-content: space-between;
   align-items: center;
   padding-bottom: 10px;
+  padding-right: 30px;
+  background-color: #0077c8;
 }
 
 .header h1 {
-  margin: 0;
+  display: inline;
 }
 
   /* Buttons */
@@ -79,7 +119,15 @@ h2, h3, h4 {
     text-align: center;
   }
 
-  .logout, .login-container button {
+  .logout {
+    background-color: #235789;
+    font-size: medium;
+    color: white;
+    padding: 10px;
+    transition: ease 0.2s;
+  }
+
+  .login-container button {
     background-color: #0d3b66;
     color: white;
     padding: 10px;
@@ -101,6 +149,14 @@ h2, h3, h4 {
     background-color: #073159;
   }
   
+
+.material-symbols-outlined {
+  padding: 10px;
+  color: white;
+  font-size: 40px;
+  padding-top: 10px;
+}
+
   .show-more {
     margin-top: 5px;
     background-color: transparent;
@@ -143,12 +199,14 @@ h2, h3, h4 {
     padding: 4px 0;
   }
   
-  li::before {
-    content: "- ";
+  .chat-options li::before {
+    content: "• ";
     color: #111d4a;
   }
-  
 
+  .lists li::before {
+    content: "• ";
+  }
 
   /* Specific Sections */
   .main-content, .course-item, .project-item {
