@@ -31,6 +31,13 @@ function SendMessage() {
     fetchCourses();
   }, []);
 
+  useEffect(() => {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (loggedInUser && loggedInUser.fullName) {
+      setSentBy(loggedInUser.fullName);
+    }
+  }, []);
+  
   // Fetch userId based on the entered email
   const fetchUserIdByEmail = async (email) => {
     if (!email) return;
@@ -87,43 +94,52 @@ function SendMessage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!recipientId || !subject || !message) {
+    if (!recipientId || !subject || !message || !selectedCourseId || !sentBy) {
       setFetchError("All fields are required, and the email must be valid");
-      return;
-    }
-
-    // Check if the user is enrolled in the selected course
-    const isEnrolled = await checkUserEnrollment(recipientId, selectedCourseId);
-    if (!isEnrolled) {
-      return;
-    }
-
-    // Insert the message into the CHAT table
-    const { error } = await supabase.from("CHAT").insert([
-      {
-        courseId: selectedCourseId,
-        userId: recipientId,
-        sentBy: "Iman",
+      console.error("Form validation failed:", {
+        recipientId,
+        selectedCourseId,
+        sentBy,
         subject,
         message,
-        seen: false,
-      },
-    ]);
-
-    if (error) {
-      setFetchError("Could not send the message");
-      console.error(error);
-    } else {
-      setFetchError(null);
-      setSuccessMessage("Message sent successfully!");
-      // Reset form fields
-      setSelectedCourseId("");
-      setRecipientEmail("");
-      setRecipientId(null);
-      setSubject("");
-      setMessage("");
-      setSentBy("");
+      });
+      return;
     }
+  
+    try {
+      // Insert the message into the CHAT table
+      const { data, error } = await supabase.from("CHAT").insert([
+        {
+          courseId: selectedCourseId,
+          userId: recipientId,
+          sentBy: sentBy,
+          subject,
+          message,
+          seen: false,
+        },
+      ]);
+  
+      // Check for errors during insertion
+      if (error) {
+        console.error("Supabase insertion error:", error);
+        setFetchError(`Could not send the message: ${error.message}`);
+      } else {
+        setFetchError(null);
+        setSuccessMessage("Message sent successfully!");
+        console.log("Message inserted successfully:", data);
+  
+        // Reset form fields
+        setSelectedCourseId("");
+        setRecipientEmail("");
+        setRecipientId(null);
+        setSubject("");
+        setMessage("");
+      }
+    } catch (err) {
+      console.error("Unexpected error during message submission:", err);
+      setFetchError("An unexpected error occurred. Please check the console for details.");
+    }
+
   };
 
   return (

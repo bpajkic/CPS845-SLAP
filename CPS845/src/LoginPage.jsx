@@ -10,8 +10,6 @@ function LoginPage() {
   const [fetchError, setFetchError] = useState(null);
   const [users, setUsers] = useState(null);
   
-  
-
   useEffect(() => {
     const fetchUsers = async () => {
       const { data, error } = await supabase
@@ -41,13 +39,37 @@ function LoginPage() {
   const[showEmailInput, setShowEmailInput] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // Basic login validation
-    if (username && password) {
-      // Redirect to homepage after "login"
-      navigate("/home");
-    } else {
+
+  const handleLogin = async () => {
+    if (!username || !password) {
       alert("Please enter both username and password.");
+      return;
+    }
+  
+    try {
+      const { data, error } = await supabase
+        .from("USERS")
+        .select("id, EMAIL, USER_NAME")
+        .eq("USER_NAME", username)
+        .eq("PASSWORD", password)
+        .single();
+  
+      if (error || !data) {
+        setError("Invalid username or password. Please try again.");
+        console.error("Login error:", error);
+      } else {
+        setError("");
+        const fullName = `${data.FIRST_NAME} ${data.LAST_NAME}`;
+  
+        // Store the logged-in user's email in localStorage
+        localStorage.setItem("loggedInUser", JSON.stringify({ id: data.id, fullName}));
+  
+        // Navigate to the homepage
+        navigate("/home");
+      }
+    } catch (err) {
+      console.error("Unexpected error during login:", err);
+      setError("An unexpected error occurred. Please try again.");
     }
   };
 
