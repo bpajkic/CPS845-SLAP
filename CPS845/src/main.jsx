@@ -11,6 +11,7 @@ import CourseProjectsPage from './CourseProjectsPage';
 import CourseSubmissionsPage from './CourseSubmissionsPage';
 import CourseEvaluationsPage from './CourseEvaluationsPage';
 import ProjectInstructions from './ProjectInstructions';
+import SLAPDetails from './SLAPDetails';
 import Admin from './Admin';
 import ResetPassword from './ResetPassword';
 import SendMessage from './sendMessage';
@@ -30,6 +31,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/courses/:id/projects/:project_id" element={<ProjectInstructions />} />
         <Route path="/courses/:id/submissions" element={<CourseSubmissionsPage />} />
         <Route path="/courses/:id/evaluations" element={<CourseEvaluationsPage />} />
+        <Route path="/slaps/:id" element={<SLAPDetails />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/sendMessage" element={<SendMessage />} />

@@ -8,6 +8,7 @@ function CoursePage() {
   const { id: courseId } = useParams(); // Get the course ID from URL parameters
   const [course, setCourse] = useState(null);
   const [fetchError, setFetchError] = useState(null);
+  const [slaps, setSlaps] = useState([]);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -29,8 +30,30 @@ function CoursePage() {
     fetchCourse();
   }, [courseId]);
 
+  useEffect(() => {
+    const fetchSlaps = async () => {
+      const { data, error } = await supabase.from("SLAPS")
+      .select()
+      .or(`course_id.eq.${courseId},course_id.is.null`);
+      
+      if (error) {
+        setFetchError("Could not fetch slaps");
+        setSlaps([]); 
+        console.error(error);
+      } else {
+        setSlaps(data);
+        setFetchError(null);
+      }
+    };
+
+    fetchSlaps();
+  }, []);
+
   if (fetchError) return <p className="error">{fetchError}</p>;
   if (!course) return <p>Loading...</p>;
+
+  console.log('Slaps:', slaps); // Debugging: log the fetched slaps
+  console.log('Course ID:', courseId); // Debugging: log the courseId
 
   return (
     <TemplatePage>
@@ -57,6 +80,19 @@ function CoursePage() {
         <p>
           <Link to={`/courses/${courseId}/evaluations`}>View evaluations here.</Link>
         </p>
+      </div>
+
+      <div className="course-section">
+        <h2>SLAPS</h2>
+        <ul className="lists">
+          {fetchError && <p className="error">{fetchError}</p>}
+          {slaps.length === 0 && !fetchError && <p>No SLAPs available.</p>} {/* Display a message if no slaps */}
+          {slaps.map((slap) => (
+            <li key={slap.id} className="slap-options">
+              <Link to={`/slaps/${slap.id}`}>{slap.Title}</Link>
+            </li>
+            ))}
+        </ul>
       </div>
     </div>
     </TemplatePage>

@@ -42,11 +42,11 @@ function TemplatePage({ children }) {
         console.error("Could not fetch account type", error);
         setAccountType(null);
       } else {
-        setAccountType(data?.ACCOUNT_TYPE);
+        setAccountType(data?.[0]?.ACCOUNT_TYPE); 
       }
-    }
+    };
     fetchAccountType();
-  });
+  }, [loggedInUser]);
 
   // Fetch courses
   useEffect(() => {
@@ -187,15 +187,19 @@ function TemplatePage({ children }) {
           <button className="send-message" onClick={handleSendMessage}>
             Send Message
           </button>
-          {/*Needs to be instructor view only*/}
-            <h2 id="options">Options</h2>
-            <nav className="option-menu">
-            <ul className="option-submenu">
-              <li>
-                <Link to="/home/CreateSLAP">Create New SLAP</Link>
-              </li>
-            </ul>
-            </nav>
+           {/* Only render if accountType is 'professor' */}
+           {accountType === "professor" && (
+            <div>
+              <h2 id="options">Options</h2>
+              <nav className="option-menu">
+                <ul className="option-submenu">
+                  <li>
+                    <Link to="/home/CreateSLAP">Create New SLAP</Link>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          )}
         </aside>
         {/* main */}
         <main className="content">

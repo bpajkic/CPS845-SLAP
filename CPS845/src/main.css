@@ -272,7 +272,7 @@ h2, h4 {
     margin: 15px 0;
   }
   
-  .project-instructions {
+  .project-instructions, .slap-details {
     max-width: 600px;
     margin: 20px auto;
     padding: 20px;
