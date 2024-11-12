@@ -194,7 +194,10 @@ function TemplatePage({ children }) {
               <nav className="option-menu">
                 <ul className="option-submenu">
                   <li>
-                    <Link to="/home/CreateSLAP">Create New SLAP</Link>
+                    <Link to="/home/CreateSLAP">Create New SLAPs</Link>
+                  </li>
+                  <li>
+                    <Link to="/home/CreateProject">New Project</Link>
                   </li>
                 </ul>
               </nav>

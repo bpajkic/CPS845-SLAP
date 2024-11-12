@@ -3,11 +3,11 @@ import supabase from '../supabaseClient';
 import TemplatePage from "./TemplatePage";
 import './main.css';
 
-function CreateSLAP() {
-    const [title, setTitle] = useState('');
+function CreateProject() {
+    const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [courses, setCourses] = useState([]);
-    const [selectedCourse, setSelectedCourse] = useState('all');
+    const [selectedCourse, setSelectedCourse] = useState(null);
     const [status, setStatus] = useState(null);
     const [fetchError, setFetchError] = useState(null);
 
@@ -37,49 +37,48 @@ function CreateSLAP() {
 
     if (!courses) return <p>Loading...</p>;
 
-    const handleSendSLAP = async () => {
-        if (!title) {
-            setStatus('Title cannot be empty');
+    const handleCreateProject = async () => {
+        if (!name) {
+            setStatus('Name cannot be empty');
             return;
         }
 
         try {
             const { error } = await supabase
-                .from('SLAPS')
+                .from('projects')
                 .insert([
                     {
-                        created_at: new Date(),
-                        Title: title,
-                        Description: description,
-                        course_id: selectedCourse === 'all' ? null : selectedCourse,
+                        course_id: selectedCourse,
+                        name: name,
+                        description: description,
                     },
                 ]);
 
             if (error) {
                 console.error('Insert error:', error);
-                setStatus('Error sending SLAP. Please try again.');
+                setStatus('Error creating project. Please try again.');
             } else {
-                setTitle('');
+                setName('');
                 setDescription('');
-                setSelectedCourse('all');
-                setStatus('SLAP sent successfully!');
+                setSelectedCourse(null);
+                setStatus('Project created successfully!');
             }
         } catch (error) {
             console.error('Unexpected error:', error);
-            setStatus('Error sending SLAP. Please try again.');
+            setStatus('Error creating project. Please try again.');
         }
     };
 
     return (
         <TemplatePage>
-            <div className="create-slap-container">
-                <h1>Create New SLAPs</h1>
+            <div className="create-project-container">
+                <h1>Create Project</h1>
 
-                <h3>Title</h3>
+                <h3>Name</h3>
                 <input
                     type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                 />
 
                 <h3>Description</h3>
@@ -91,8 +90,8 @@ function CreateSLAP() {
                 />
 
                 <h3>Select Class:</h3>
-                <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}>
-                    <option value="all">All Courses</option>
+                <select value={selectedCourse || ''} onChange={(e) => setSelectedCourse(e.target.value)}>
+                    <option value="" disabled>Select Course</option>
                     {courses.map((course) => (
                         <option key={course.id} value={course.id}>
                             {course.COURSE_CODE}
@@ -100,7 +99,7 @@ function CreateSLAP() {
                     ))}
                 </select>
 
-                <button onClick={handleSendSLAP}>Send SLAP</button>
+                <button onClick={handleCreateProject}>Create Project</button>
 
                 {status && <p className="status">{status}</p>}
             </div>
@@ -108,4 +107,4 @@ function CreateSLAP() {
     );
 }
 
-export default CreateSLAP;
+export default CreateProject;
