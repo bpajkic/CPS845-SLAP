@@ -143,6 +143,12 @@ function TemplatePage({ children }) {
 
   const groupedMessages = getMessagesByCourse();
 
+  // Redirect to Admin Page if User is Admin
+  if (accountType === "admin") {
+    navigate("/admin");
+    return false;
+  }
+
   return (
     <div>
       <header className="header">

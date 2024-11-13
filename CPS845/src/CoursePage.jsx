@@ -33,8 +33,8 @@ function CoursePage() {
   useEffect(() => {
     const fetchSlaps = async () => {
       const { data, error } = await supabase.from("SLAPS")
-      .select()
-      .or(`course_id.eq.${courseId},course_id.is.null`);
+        .select()
+        .or(`course_id.eq.${courseId},course_id.is.null`);
       
       if (error) {
         setFetchError("Could not fetch slaps");
@@ -45,9 +45,9 @@ function CoursePage() {
         setFetchError(null);
       }
     };
-
+  
     fetchSlaps();
-  }, []);
+  }, [courseId]);
 
   if (fetchError) return <p className="error">{fetchError}</p>;
   if (!course) return <p>Loading...</p>;

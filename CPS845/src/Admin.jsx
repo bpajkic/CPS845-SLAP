@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import supabase from '../supabaseClient';
+import CreateSLAP from "./CreateSLAP";
 import "./main.css";
 
 const Admin = () => {
@@ -99,28 +100,59 @@ const Admin = () => {
   
   // User Management Component
   const UserManagement = () => {
+
+    //Create User
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [accountType, setAccountType] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
 
-    const [resetPasswordUsername, setResetPasswordUsername] = useState("");
-
-    const handleUserRegistration = () => {
-      
-      if (firstName && lastName && accountType && username && password) {
+    const handleUserRegistration = async () => {
+      if (firstName && lastName && accountType && username && password && email) {
         console.log(`Registering user: ${username}`);
-        alert("User Created");
-        setFirstName("");
-        setLastName("");
-        setAccountType("");
-        setUsername("");
-        setPassword("");
+
+        try {
+          const { error } = await supabase
+              .from('USERS')
+              .insert([
+                  {
+                      created_at: new Date(),
+                      FIRST_NAME: firstName,
+                      LAST_NAME: lastName,
+                      ACCOUNT_TYPE: accountType,
+                      USER_NAME: username,
+                      PASSWORD: password,
+                      EMAIL: email,
+                  },
+              ]);
+
+          if (error) {
+            console.error('Insert error:', error);
+            alert('Error creating User. Please try again.');
+          } else {
+            alert("User Created");
+            setFirstName("");
+            setLastName("");
+            setAccountType("");
+            setUsername("");
+            setPassword("");
+            setEmail("");
+          }
+        } catch (error) {
+          console.error('Unexpected error:', error);
+          alert('Error creating User. Please try again.');
+        }
+
       } else {
         alert("Please all required information");
       }
     };
+
+
+    //Reset Password
+    const [resetPasswordUsername, setResetPasswordUsername] = useState("");
 
     const generateRandomPassword = (length = 8) => {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
@@ -132,14 +164,35 @@ const Admin = () => {
       return password;
     };
 
-    const handlePasswordReset = () => {
-      const newPassword = generateRandomPassword();
-      if (resetPasswordUsername) {
+    const handlePasswordReset = async () => {
+
+      const usernameExists = users.some(user => user.USER_NAME === resetPasswordUsername);
+      
+      if (resetPasswordUsername && usernameExists) {
         console.log(`Resetting password for: ${resetPasswordUsername}`);
-        alert(`Password Reset To: ${newPassword}`);
-        setResetPasswordUsername("");
+        const newPassword = generateRandomPassword();
+
+        try {
+          const { error } = await supabase
+              .from('USERS')
+              .update({ PASSWORD: newPassword })  // update the PASSWORD field
+              .eq('USER_NAME', resetPasswordUsername);  // filter where USER_NAME matches
+
+          if (error) {
+            console.error('Update error:', error);
+            alert('Error reseting Password. Please try again.');
+          } else {
+            alert(`Password Reset To: ${newPassword}`);
+            setResetPasswordUsername("");
+          }
+        } catch (error) {
+          console.error('Unexpected error:', error);
+          alert('Error reseting Password. Please try again.');
+        }
+
+        
       } else {
-        alert("Please all required information");
+        alert("Invalid Username");
       }
     };
 
@@ -174,9 +227,10 @@ const Admin = () => {
                 onChange={(e) => setAccountType(e.target.value)}
               >
                 <option value="">Select Account Type</option>
-                <option value="admin">Student</option>
-                <option value="user">Instructor</option>
-                <option value="guest">Admin</option>
+                <option value="student">Student</option>
+                <option value="professor">Professor</option>
+                <option value="teaching-assistant">Teaching Assistant</option>
+                <option value="admin">Admin</option>
               </select>
           </div>
           <div>
@@ -193,6 +247,14 @@ const Admin = () => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <button onClick={handleUserRegistration}>Register</button>
@@ -216,23 +278,47 @@ const Admin = () => {
 
   // Course Management Component
   const CourseManagement = () => {
-    const [courseName, setCourseName] = useState("");
     const [courseCode, setCourseCode] = useState("");
+    const [courseName, setCourseName] = useState("");
     const [courseDescription, setCourseDescription] = useState("");
     const [enrollmentDeadline, setEnrollmentDeadline] = useState("");
     const [courseStartDate, setCourseStartDate] = useState("");
     const [courseEndDate, setCourseEndDate] = useState("");
 
-    const handleCreateCourse = () => {
-      if (courseName && courseCode && courseDescription && enrollmentDeadline && courseStartDate && courseEndDate) {
-        console.log(`Creating course: ${courseName} ${courseCode}`);
-        alert(`Created course: ${courseName} ${courseCode}`);
-        setCourseName("");
-        setCourseCode("");
-        setCourseDescription("");
-        setEnrollmentDeadline("");
-        setCourseStartDate("");
-        setCourseEndDate("");
+    const handleCreateCourse = async () => {
+      if (courseCode && courseName && courseDescription && enrollmentDeadline && courseStartDate && courseEndDate) {
+        try {
+          const { error } = await supabase
+              .from('COURSES')
+              .insert([
+                  {
+                      created_at: new Date(),
+                      COURSE_CODE: courseCode,
+                      COURSE_NAME: courseName,
+                      COURSE_DESCRIPTION: courseDescription,
+                      ENROLLMENT_DEADLINE: enrollmentDeadline,
+                      COURSE_START_DATE: courseStartDate,
+                      COURSE_END_DATE: courseEndDate,
+                  },
+              ]);
+
+          if (error) {
+            console.error('Insert error:', error);
+            alert('Error creating User. Please try again.');
+          } else {
+            console.log(`Creating course: ${courseName} ${courseCode}`);
+            alert(`Created course: ${courseCode}  ${courseName}`);
+            setCourseCode("");
+            setCourseName("");
+            setCourseDescription("");
+            setEnrollmentDeadline("");
+            setCourseStartDate("");
+            setCourseEndDate("");
+          }
+        } catch (error) {
+          console.error('Unexpected error:', error);
+          alert('Error creating User. Please try again.');
+        }
       } else {
         alert("Please all required information");
       }
@@ -246,15 +332,15 @@ const Admin = () => {
           <h2>Create New Course</h2>
           <input
             type="text"
-            placeholder="Course Name"
-            value={courseName}
-            onChange={(e) => setCourseName(e.target.value)}
-          />
-          <input
-            type="text"
             placeholder="Course Code"
             value={courseCode}
             onChange={(e) => setCourseCode(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Course Name"
+            value={courseName}
+            onChange={(e) => setCourseName(e.target.value)}
           />
           <input
             type="text"
@@ -291,40 +377,82 @@ const Admin = () => {
 
   // SLAPs Management Component
   const SlapsManagement = () => (
-    <div>
-      <h1>SLAPs Management</h1>
-      <p className="main-content">Manage SLAPs here. Add specific SLAPs functionalities as needed.</p>
-      {/* Add SLAPs management functionality here */}
+    <div className="main-content">
+      <CreateSLAP admin={true}/>
     </div>
   );
 
   // Contacts Component
-  const Contacts = () => (
-    <div>
-      <h1>Contacts</h1>
-      <div className="main-content">
-        <h2>Manage reorganize contacts here.</h2>
-        {fetchError && <p className="error">Could Not Fetch Users</p>}
-        <table>
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Password</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.USER_NAME}</td>
-                <td>{user.PASSWORD}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+  const Contacts = () => {
+    const [sortedUsers, setSortedUsers] = useState(users);
+    const [isSortedAsc, setIsSortedAsc] = useState(true);
+    const [sortingColumn, setSortingColumn] = useState("-");
+  
+    const handleSortByFirstName = () => {
+      const sortedArray = [...sortedUsers].sort((a, b) => {
+        if (a.FIRST_NAME < b.FIRST_NAME) return isSortedAsc ? -1 : 1;
+        if (a.FIRST_NAME > b.FIRST_NAME) return isSortedAsc ? 1 : -1;
+        return 0;
+      });
+  
+      setSortedUsers(sortedArray);
+      setIsSortedAsc(!isSortedAsc); // Toggle sorting direction
+      setSortingColumn("firstName");
+    };
 
-      </div>
-    </div>
-  );
+
+    const handleSortByLastName = () => {
+      const sortedArray = [...sortedUsers].sort((a, b) => {
+        if (a.LAST_NAME < b.LAST_NAME) return isSortedAsc ? -1 : 1;
+        if (a.LAST_NAME > b.LAST_NAME) return isSortedAsc ? 1 : -1;
+        return 0;
+      });
+  
+      setSortedUsers(sortedArray);
+      setIsSortedAsc(!isSortedAsc); // Toggle sorting direction
+      setSortingColumn("lastName");
+    };
+
+    const handleSortByAccountType = () => {
+      const sortedArray = [...sortedUsers].sort((a, b) => {
+        if (a.ACCOUNT_TYPE < b.ACCOUNT_TYPE) return isSortedAsc ? -1 : 1;
+        if (a.ACCOUNT_TYPE > b.ACCOUNT_TYPE) return isSortedAsc ? 1 : -1;
+        return 0;
+      });
+  
+      setSortedUsers(sortedArray);
+      setIsSortedAsc(!isSortedAsc); // Toggle sorting direction
+      setSortingColumn("accountType");
+    };
+
+    
+    return (
+      <table className="main-content">
+        <thead>
+          <tr>
+            <th onClick={handleSortByFirstName} style={{ cursor: "pointer" }}>
+              First Name {sortingColumn === "firstName" ? (isSortedAsc ? "↑" : "↓") : "-" }
+            </th>
+            <th onClick={handleSortByLastName} style={{ cursor: "pointer" }}>
+              Last Name {sortingColumn === "lastName" ? (isSortedAsc ? "↑" : "↓") : "-" }
+            </th>
+            <th onClick={handleSortByAccountType} style={{ cursor: "pointer" }}>
+              Account Type {sortingColumn === "accountType" ? (isSortedAsc ? "↑" : "↓") : "-" }
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedUsers.map((user) => (
+            <tr key={user.id}>
+              <td>{user.FIRST_NAME}</td>
+              <td>{user.LAST_NAME}</td>
+              <td>{user.ACCOUNT_TYPE}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
 
   const renderContent = () => {
     switch (submenuVisibility) {

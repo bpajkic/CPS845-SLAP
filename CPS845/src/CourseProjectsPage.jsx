@@ -29,14 +29,11 @@ function CourseProjectsPage() {
     fetchProjects();
   }, [courseId]);
 
-  if (fetchError) return <p className="error">{fetchError}</p>;
-  if (!projects.length) return <p>No projects available for this course.</p>;
-
   return (
     <TemplatePage>
     <div className="course-projects-page">
       <h1>Projects for Course {courseId}</h1>
-
+      {fetchError && <p className="error">{fetchError}</p>}
       <ul className="project-list">
         {projects.map((project) => (
           <li key={project.project_id} className="project-item">
