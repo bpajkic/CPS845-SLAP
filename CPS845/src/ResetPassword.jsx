@@ -85,7 +85,7 @@ function ResetPassword() {
           const { error } = await supabase
               .from('USERS')
               .update({ PASSWORD: newPassword })
-              .eq('USER_NAME', loggedInUser.USER_NAME);
+              .eq('EMAIL', loggedInUser.EMAIL);
 
           if (!error) {
               setMessage('Password changed successfully!');
