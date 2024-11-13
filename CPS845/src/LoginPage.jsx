@@ -35,7 +35,8 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const[message,setMessage] = useState('');
   const[error,setError] = useState('');
-  const [showUsernameInput, setShowUsernameInput] = useState(false);
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [email, setEmail] = useState('');
   const navigate = useNavigate();
 
 
@@ -74,7 +75,7 @@ function LoginPage() {
 
   const handleForgotPasswordClick = () => {
     // Show the username input field
-    setShowUsernameInput(true);
+    setShowEmailInput(true);
     setMessage('');
     setError('');
   };
@@ -89,18 +90,18 @@ function LoginPage() {
       const { data, error } = await supabase
         .from('USERS')
         .select('id')  // Fetch only the ID field to verify existence
-        .eq('username', username)
+        .eq('EMAIL', email)
         .single();
 
       if (error || !data) {
-        setError('Username does not exist.');
+        setError('Email does not exist.');
       } else {
-        setMessage('Username is valid. Request sent to admin!');
-        setShowUsernameInput(false);
+        setMessage('Email is valid. Request sent to admin!');
+        setShowEmailInput(false);
       }
     } catch (err) {
-      console.error('Error verifying username:', err);
-      setError('An error occurred while checking the username. Please try again.');
+      console.error('Error verifying email:', err);
+      setError('An error occurred while checking the email. Please try again.');
     }
   };
 
@@ -151,15 +152,15 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Login</button>
-        {!showUsernameInput  && (<button onClick={handleForgotPasswordClick}>Forgot Password</button>)}
-        {showUsernameInput  && (
+        {!showEmailInput  && (<button onClick={handleForgotPasswordClick}>Forgot Password</button>)}
+        {showEmailInput  && (
         <form onSubmit={handleSendRequest}>
           <label>
-            Enter your username:
+            Enter your email:
             <input
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </label>
