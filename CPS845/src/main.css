@@ -90,11 +90,15 @@ h2, h4 {
   overflow-x: hidden;
   flex-direction: column;
   padding: 10px;
-  transition: all 0.5s ease;
+  transition: all 0.5s ease-in-out;
 }
 
 .sidebar:hover {
   width: 300px; 
+  .chat-submenu, .option-menu, .menu {
+    padding-bottom: 20px;
+    transition: all 0.4s ease;
+  }
 }
 
 .sidebar .sidebar-header {
@@ -481,4 +485,62 @@ textarea {
   margin: 8px 0;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.view-messages-page {
+  padding: 20px;
+}
+
+.messages-container {
+  margin-top: 20px;
+}
+
+.message {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.message.seen {
+  background-color: #f0f0f0;
+}
+
+.message.unseen {
+  background-color: #e0ffe0;
+}
+
+.message-subject {
+  font-weight: bold;
+}
+
+.message-timestamp {
+  font-size: 12px;
+  color: #888;
+}
+
+
+.back-button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: white;
+  transition: ease 0.2s;
+  color:#0047ab;
+}
+.back-button:hover {
+  background-color: rgb(233, 230, 230);
+}
+
+.reply-button {
+  padding: 10px;
+  padding-left: 40px;
+  padding-right: 40px;
+  background-color: white;
+  color:#0047ab;
+  font-weight: 500;
+  margin-left: 10px;
+  border-radius: 20px;
+  transition: ease 0.2s;
+}
+
+.reply-button:hover {
+  background-color: #fcd658;
 }

@@ -16,6 +16,7 @@ import SLAPDetails from './SLAPDetails';
 import Admin from './Admin';
 import ResetPassword from './ResetPassword';
 import SendMessage from './sendMessage';
+import ViewMessages from './ViewMessages';
 
 import './main.css';
 
@@ -37,6 +38,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/admin" element={<Admin />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/sendMessage" element={<SendMessage />} />
+        <Route path="/viewMessages/:courseId/:sender" element={<ViewMessages />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
