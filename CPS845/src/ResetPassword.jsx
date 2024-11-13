@@ -31,7 +31,7 @@ function ResetPassword() {
           const { data, error } = await supabase
               .from('USERS')
               .select('PASSWORD')
-              .eq('EMAIL', loggedInUser.EMAIL) // Assuming USER_NAME is stored in loggedInUser
+              .eq('EMAIL', loggedInUser.email) // Assuming USER_NAME is stored in loggedInUser
               .single();
 
           if (error) {
@@ -85,7 +85,7 @@ function ResetPassword() {
           const { error } = await supabase
               .from('USERS')
               .update({ PASSWORD: newPassword })
-              .eq('EMAIL', loggedInUser.EMAIL);
+              .eq('EMAIL', loggedInUser.email);
 
           if (!error) {
               setMessage('Password changed successfully!');
