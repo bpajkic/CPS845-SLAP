@@ -477,6 +477,11 @@ textarea {
   color: white;
   padding: 10px;
   border: none;
+  margin-top: 15px;
+}
+
+.create-slap-container button:hover, .create-project-container button:hover, .project-instructions button:hover, .edit-project-container button:hover {
+  background-color: #111d4a;
 }
 
 .create-slap-container input, .create-slapcontainer textarea, .create-project-container input, .create-project-container textarea {
