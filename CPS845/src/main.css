@@ -150,6 +150,14 @@ h2, h4 {
     padding: 10px;
     transition: ease 0.2s;
   }
+  .changePassword {
+    background-color: #235789;
+    font-size: medium;
+    color: white;
+    padding: 10px;
+    transition: ease 0.2s;
+  }
+
 
   .login-container button {
     background-color: #0d3b66;

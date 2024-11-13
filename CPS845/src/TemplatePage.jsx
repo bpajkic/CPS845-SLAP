@@ -158,6 +158,9 @@ function TemplatePage({ children }) {
         </div>
         <div className="account-details">
           <h4>{loggedInUser?.fullName}'s SLAP Profile</h4>
+          <Link to="/reset-password">
+          <button className = "changePassword">Change Password</button>
+        </Link>
           <button className="logout" onClick={handleLogout}>
             LOGOUT
           </button>

@@ -1,45 +1,113 @@
 import React, { useState } from 'react';
 import supabase  from "../supabaseClient";
-import { useNavigate, useLocation } from 'react-router-dom';
+import TemplatePage from "./TemplatePage";
 import './main.css';
 
 
 function ResetPassword() {
-    const [newPassword, setNewPassword] = useState('');
-    const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
-    const location = useLocation();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+const [loggedInUser, setLoggedInUser] = useState(null);
+
+
   
-    const handlePasswordReset = async (e) => {
-      e.preventDefault();
-      setMessage('');
-      setError('');
+
+
   
-      const token = new URLSearchParams(location.search).get('token'); // Extract the token from URL
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+
   
-      if (!token) {
-        setError('Invalid or missing reset token.');
-        return;
+
+      const user = JSON.parse(localStorage.getItem("loggedInUser"));
+      if (user) {
+        setLoggedInUser(user);
       }
   
-      // Complete the password reset process with the new password
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword,
-      });
+    
+
+    // Step 1: Validate the new password and confirm password match
+    if (newPassword !== confirmPassword) {
+      setError('New passwords do not match.');
+      return;
+    }
+
+    // Validate new password length (optional)
+    if (newPassword.length < 8) {
+      setError('New password must be at least 8 characters.');
+      return;
+    }
+
+    try {
+      
+
+      const {data, error } = await supabase
+        .from('USERS')
+        .select()
+        .eq('USER_NAME', loggedInUser.USER_NAME)
+        .eq('PASSWORD', loggedInUser.PASSWORD)
+        .single 
+
+        
+
+        if(error){
+          setError('User not logged in')
+          return;
+        }
+
+        if(loggedInUser.PASSWORD !== oldPassword){
+          setError('Old password is incorrect')
+          return;
+        }
+
+        try{
+          const {error} = await supabase
+          .from('USERS')
+          .update({PASSWORD: confirmPassword})
+          .eq('USER_NAME', loggedInUser.USER_NAME)
+
+          if(!error){
+            setMessage('Password changed successfully!');
+          }
+          
+        }catch(error){
+          setError('An error occurred while changing the password.');
+
+        }
+
+    } catch (err) {
+      setError('An error occurred while changing the password.');
+    }
+  };
   
-      if (error) {
-        setError(error.message);
-      } else {
-        setMessage('Password updated successfully! Redirecting to login...');
-        setTimeout(() => navigate('/'), 2000); // Redirect to login page
-      }
-    };
-  
-    return (
-      <div className="login-container">
-        <h2>Reset Password</h2>
-        <form onSubmit={handlePasswordReset}>
+
+
+  return (
+    <TemplatePage>
+    <div>
+      <h2>Change Password</h2>
+      <form onSubmit={handleChangePassword}>
+        <div>
+          <label>
+            Old Password:
+            <input
+              type="password"
+              value={oldPassword}
+              
+              onChange={(e) => setOldPassword(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div>
           <label>
             New Password:
             <input
@@ -49,13 +117,27 @@ function ResetPassword() {
               required
             />
           </label>
-          <button type="submit">Reset Password</button>
-        </form>
-  
-        {message && <p style={{ color: 'green' }}>{message}</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </div>
-    );
+        </div>
+        <div>
+          <label>
+            Confirm New Password:
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <button className="changePassword" type="submit">Change Password</button>
+      </form>
+
+      {/* Show error or success message */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {message && <p style={{ color: 'green' }}>{message}</p>}
+    </div>
+    </TemplatePage>
+  );
   }
   
   export default ResetPassword;
