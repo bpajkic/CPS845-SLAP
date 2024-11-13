@@ -342,6 +342,7 @@ h2, h4 {
     padding: 3px;
     background-color: #ffc609;
     transition: ease 0.2s;
+    margin-bottom: 15px;
   }
   
   .send-message:hover {
