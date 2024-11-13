@@ -1,91 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import supabase  from "../supabaseClient";
 import TemplatePage from "./TemplatePage";
 import './main.css';
 
 
 function ResetPassword() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
-const [loggedInUser, setLoggedInUser] = useState(null);
+    const [loggedInUser, setLoggedInUser] = useState(null);
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
+    const [password, setPassword] = useState(''); // State for storing the password fetched from the DB
 
-
-  
-
-
-  
-
-  const handleChangePassword = async (e) => {
-    e.preventDefault();
-    setError('');
-    setMessage('');
-
-  
-
-      const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    useEffect(() => {
+      const user = JSON.parse(localStorage.getItem('loggedInUser'));
       if (user) {
-        setLoggedInUser(user);
+          setLoggedInUser(user);
       }
-  
-    
+  }, []);
 
-    // Step 1: Validate the new password and confirm password match
-    if (newPassword !== confirmPassword) {
-      setError('New passwords do not match.');
-      return;
-    }
+  // Function to get the password from the USERS table based on USER_NAME
+  const getPasswordForLoggedInUser = async () => {
+      if (!loggedInUser) {
+          console.error('No logged-in user found.');
+          return null;
+      }
 
-    // Validate new password length (optional)
-    if (newPassword.length < 8) {
-      setError('New password must be at least 8 characters.');
-      return;
-    }
+      try {
+          const { data, error } = await supabase
+              .from('USERS')
+              .select('PASSWORD')
+              .eq('USER_NAME', loggedInUser.USER_NAME) // Assuming USER_NAME is stored in loggedInUser
+              .single();
 
-    try {
-      
-
-      const {data, error } = await supabase
-        .from('USERS')
-        .select()
-        .eq('USER_NAME', loggedInUser.USER_NAME)
-        .eq('PASSWORD', loggedInUser.PASSWORD)
-        .single 
-
-        
-
-        if(error){
-          setError('User not logged in')
-          return;
-        }
-
-        if(loggedInUser.PASSWORD !== oldPassword){
-          setError('Old password is incorrect')
-          return;
-        }
-
-        try{
-          const {error} = await supabase
-          .from('USERS')
-          .update({PASSWORD: confirmPassword})
-          .eq('USER_NAME', loggedInUser.USER_NAME)
-
-          if(!error){
-            setMessage('Password changed successfully!');
+          if (error) {
+              console.error('Error retrieving password:', error);
+              return null;
           }
-          
-        }catch(error){
+
+          // Set the password state (for verification purposes)
+          setPassword(data ? data.PASSWORD : '');
+      } catch (error) {
+          console.error('Unexpected error:', error);
+      }
+  };
+
+  // Call getPasswordForLoggedInUser when component mounts or loggedInUser changes
+  useEffect(() => {
+      if (loggedInUser) {
+          getPasswordForLoggedInUser();
+      }
+  }, [loggedInUser]);
+
+  // Function to handle changing the password
+  const handleChangePassword = async (e) => {
+      e.preventDefault();
+      setError('');
+      setMessage('');
+
+      // Step 1: Validate the new password and confirm password match
+      if (newPassword !== confirmPassword) {
+          setError('New passwords do not match.');
+          return;
+      }
+
+      // Validate new password length
+      if (newPassword.length < 8) {
+          setError('New password must be at least 8 characters.');
+          return;
+      }
+
+      // Step 2: Verify old password matches the one in the database
+      if (oldPassword !== password) {
+          setError('Old password is incorrect.');
+          return;
+      }
+
+      try {
+          // Step 3: Update the password in the database
+          const { error } = await supabase
+              .from('USERS')
+              .update({ PASSWORD: newPassword })
+              .eq('USER_NAME', loggedInUser.USER_NAME);
+
+          if (!error) {
+              setMessage('Password changed successfully!');
+          } else {
+              setError('An error occurred while changing the password.');
+          }
+      } catch (err) {
           setError('An error occurred while changing the password.');
-
-        }
-
-    } catch (err) {
-      setError('An error occurred while changing the password.');
-    }
+      }
   };
   
 
@@ -99,7 +105,7 @@ const [loggedInUser, setLoggedInUser] = useState(null);
           <label>
             Old Password:
             <input
-              type="password"
+              type="text"
               value={oldPassword}
               
               onChange={(e) => setOldPassword(e.target.value)}
@@ -111,7 +117,7 @@ const [loggedInUser, setLoggedInUser] = useState(null);
           <label>
             New Password:
             <input
-              type="password"
+              type="text"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               required
@@ -122,7 +128,7 @@ const [loggedInUser, setLoggedInUser] = useState(null);
           <label>
             Confirm New Password:
             <input
-              type="password"
+              type="text"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
