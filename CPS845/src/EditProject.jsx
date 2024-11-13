@@ -5,7 +5,7 @@ import TemplatePage from "./TemplatePage";
 import './main.css';
 
 function EditProject() {
-    const { project_id: projectId } = useParams();
+    const { id: courseId, project_id: projectId } = useParams();
     const navigate = useNavigate();
 
     const [name, setName] = useState('');
@@ -84,7 +84,7 @@ function EditProject() {
                 setStatus('Error updating project. Please try again.');
             } else {
                 setStatus('Project updated successfully!');
-                setTimeout(() => navigate('/projects'), 2000);
+                setTimeout(() => navigate(`/courses/${courseId}/projects/${projectId}`), 2000);
             }
         } catch (error) {
             console.error('Unexpected error:', error);
