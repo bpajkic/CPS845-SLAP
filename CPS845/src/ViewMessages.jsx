@@ -10,8 +10,8 @@ function ViewMessages() {
   const [messages, setMessages] = useState([]);
   const [fetchError, setFetchError] = useState(null);
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const [recipientEmail, setRecipientEmail] = useState("");
   const [senderEmail, setSenderEmail] = useState("");
+  const [senderId, setSenderId] = useState(null);
 
   // Get the logged-in user from localStorage
   useEffect(() => {
@@ -21,29 +21,44 @@ function ViewMessages() {
     }
   }, []);
 
-  // Fetch the sender's email from the messages data
-  useEffect(() => {
-    const fetchSenderEmail = () => {
-      // Look for a message sent by the sender and retrieve the senderEmail
-      const messageFromSender = messages.find((msg) => msg.sentBy === sender);
-      if (messageFromSender) {
-        setSenderEmail(messageFromSender.senderEmail);
-      }
-    };
+  // Fetch the sender's user ID and email using FIRST_NAME and LAST_NAME
+  const fetchSenderInfo = async () => {
+    if (!sender) return;
 
-    fetchSenderEmail();
-  }, [messages, sender]);
+    const [firstName, lastName] = sender.split(" ");
+
+    const { data, error } = await supabase
+      .from("USERS")
+      .select("id, EMAIL")
+      .eq("FIRST_NAME", firstName)
+      .eq("LAST_NAME", lastName)
+      .single();
+
+    if (error) {
+      console.error("Could not fetch sender information:", error);
+    } else {
+      setSenderId(data.id);
+      setSenderEmail(data.EMAIL);
+    }
+  };
+
+  // Fetch the sender's information when the sender changes
+  useEffect(() => {
+    fetchSenderInfo();
+  }, [sender]);
 
   // Fetch all messages exchanged between the logged-in user and the sender
   useEffect(() => {
     const fetchConversation = async () => {
-      if (!loggedInUser || !courseId || !sender) return;
+      if (!loggedInUser || !courseId || !senderId) return;
 
       const { data, error } = await supabase
         .from("CHAT")
         .select("messageId, courseId, userId, sentBy, senderEmail, subject, message, seen, timestamp")
         .eq("courseId", courseId)
-        .or(`sentBy.eq.${sender},senderEmail.eq.${loggedInUser.email}`)
+        .or(
+          `and(userId.eq.${loggedInUser.id},senderEmail.eq.${senderEmail}),and(userId.eq.${senderId},senderEmail.eq.${loggedInUser.email})`
+        )
         .order("timestamp", { ascending: true });
 
       if (error) {
@@ -57,13 +72,12 @@ function ViewMessages() {
     };
 
     fetchConversation();
-  }, [loggedInUser, courseId, sender]);
+  }, [loggedInUser, courseId, senderId, senderEmail]);
 
   // Mark all unseen messages as seen when the recipient views them
   const markMessagesAsSeen = async (messages) => {
     if (!loggedInUser) return;
 
-    // Filter messages where the logged-in user is the recipient and the message is unseen
     const unseenMessageIds = messages
       .filter((msg) => !msg.seen && msg.userId === loggedInUser.id)
       .map((msg) => msg.messageId);
@@ -82,7 +96,6 @@ function ViewMessages() {
 
   // Navigate to the SendMessage form with autofilled values
   const handleReply = () => {
-    // Use the senderEmail as the recipientEmail for the reply
     navigate("/sendMessage", {
       state: {
         courseId,
