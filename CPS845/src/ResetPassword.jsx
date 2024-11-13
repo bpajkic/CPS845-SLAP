@@ -59,6 +59,9 @@ function ResetPassword() {
       setError('');
       setMessage('');
 
+
+
+
       // Step 1: Validate the new password and confirm password match
       if (newPassword !== confirmPassword) {
           setError('New passwords do not match.');
@@ -105,7 +108,7 @@ function ResetPassword() {
           <label>
             Old Password:
             <input
-              type="text"
+              type="password"
               value={oldPassword}
               
               onChange={(e) => setOldPassword(e.target.value)}
@@ -117,7 +120,7 @@ function ResetPassword() {
           <label>
             New Password:
             <input
-              type="text"
+              type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               required
@@ -128,7 +131,7 @@ function ResetPassword() {
           <label>
             Confirm New Password:
             <input
-              type="text"
+              type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
