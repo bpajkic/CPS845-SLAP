@@ -35,8 +35,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const[message,setMessage] = useState('');
   const[error,setError] = useState('');
-  const[email,setEmail] = useState('');
-  const[showEmailInput, setShowEmailInput] = useState(false);
+  const [showUsernameInput, setShowUsernameInput] = useState(false);
   const navigate = useNavigate();
 
 
@@ -74,27 +73,34 @@ function LoginPage() {
   };
 
   const handleForgotPasswordClick = () => {
-    // Show the email input field
-    setShowEmailInput(true);
+    // Show the username input field
+    setShowUsernameInput(true);
     setMessage('');
     setError('');
   };
 
-  const handleSendResetLink = async (e) => {
+  const handleSendRequest = async (e) => {
     e.preventDefault();
     setMessage('');
     setError('');
 
-    // Send password reset email using Supabase
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:5173/reset-password', // Adjust this URL to your reset password page
-    });
+    try {
+      // Query Supabase to check if the username exists
+      const { data, error } = await supabase
+        .from('USERS')
+        .select('id')  // Fetch only the ID field to verify existence
+        .eq('username', username)
+        .single();
 
-    if (error) {
-      setError(error.message);
-    } else {
-      setMessage('Password reset link sent! Please check your email.');
-      setShowEmailInput(false); // Hide the input field after sending the email
+      if (error || !data) {
+        setError('Username does not exist.');
+      } else {
+        setMessage('Username is valid. Request sent to admin!');
+        setShowUsernameInput(false);
+      }
+    } catch (err) {
+      console.error('Error verifying username:', err);
+      setError('An error occurred while checking the username. Please try again.');
     }
   };
 
@@ -145,19 +151,19 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Login</button>
-        {!showEmailInput && (<button onClick={handleForgotPasswordClick}>Forgot Password</button>)}
-        {showEmailInput && (
-        <form onSubmit={handleSendResetLink}>
+        {!showUsernameInput  && (<button onClick={handleForgotPasswordClick}>Forgot Password</button>)}
+        {showUsernameInput  && (
+        <form onSubmit={handleSendRequest}>
           <label>
-            Enter your email:
+            Enter your username:
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </label>
-          <button type="submit">Send Reset Link</button>
+          <button type="submit">Send Request</button>
         </form>)}
         {message && <p style={{ color: 'green' }}>{message}</p>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
