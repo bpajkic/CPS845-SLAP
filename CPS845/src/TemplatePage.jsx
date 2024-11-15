@@ -5,9 +5,26 @@ import "./main.css";
 
 function TemplatePage({ children }) {
   const navigate = useNavigate();
-  const handleLogout = () => {
+
+  
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+  
+    // Open confirmation popup
+    const handleLogoutClick = () => {
+      setIsPopupOpen(true);
+    };
+
+    const handleCancel = () => {
+      setIsPopupOpen(false);
+    };
+
+  const handleConfirmLogout = () => {
+    setIsPopupOpen(false);
     navigate("/"); // Redirect to the login page
   };
+
+
+
 
   const handleSendMessage = () => {
     navigate("/sendMessage"); // Navigate to the SendMessage form page
@@ -161,9 +178,22 @@ function TemplatePage({ children }) {
           <Link to="/reset-password">
           <button className = "changePassword">Change Password</button>
         </Link>
-          <button className="logout" onClick={handleLogout}>
+          <button className="logout" onClick={handleLogoutClick}>
             LOGOUT
           </button>
+          {isPopupOpen && (
+            <div className="overlay">
+            <div className="popup">
+              <p>Are you sure you want to logout?</p>
+              <button onClick={handleConfirmLogout} className="confirm-button">
+                I'm sure
+              </button>
+              <button onClick={handleCancel} className="cancel-button">
+                Cancel
+              </button>
+            </div>
+          </div>
+          )}
         </div>
       </header>
       <div className="container">
