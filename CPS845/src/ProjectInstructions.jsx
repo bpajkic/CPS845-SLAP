@@ -66,9 +66,14 @@ function ProjectInstructions() {
         <h3>{project.name}</h3>
         <p>{project.description}</p>
         {accountType === "professor" && (
-          <button>
-            <Link className="edit" to={`/courses/${courseId}/projects/${project.project_id}/EditProject`}>Edit</Link>
-          </button>
+          <div>
+            <button>
+              <Link className="edit" to={`/courses/${courseId}/projects/${project.project_id}/EditProject`}>Edit</Link>
+            </button>
+            <button>
+              <Link className="upload" to={`/courses/${courseId}/projects/${project.project_id}/UploadDocument`}>Upload Instruction Documents</Link>
+            </button>
+          </div>
         )}
       </div>
     </TemplatePage>
