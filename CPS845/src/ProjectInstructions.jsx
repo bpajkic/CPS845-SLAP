@@ -65,6 +65,11 @@ function ProjectInstructions() {
       <div className="project-instructions">
         <h3>{project.name}</h3>
         <p>{project.description}</p>
+        {accountType === "student" && (
+          <button>
+            <Link className="upload" to={`/courses/${courseId}/projects/${project.project_id}/SubmitAssignment`}>Submit Assignment</Link>
+          </button>
+        )}
         {accountType === "professor" && (
           <div>
             <button>

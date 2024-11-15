@@ -4,7 +4,7 @@ import supabase from '../supabaseClient';
 import TemplatePage from "./TemplatePage";
 import './main.css';
 
-function UploadDocument() {
+function SubmitAssignment() {
   const { course_id: courseId, project_id: projectId } = useParams();
   const [project, setProject] = useState(null);
   const [fetchError, setFetchError] = useState(null); 
@@ -13,15 +13,19 @@ function UploadDocument() {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState('');
-  const [title, setTitle] = useState(''); 
+  const [loggedInUser, setLoggedInUser] = useState(null);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-  };
+  // Get logged-in user from localStorage
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (user) {
+      setLoggedInUser(user);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -49,11 +53,6 @@ function UploadDocument() {
       return;
     }
   
-    if (!title) {
-      setMessage('Please provide a title for the document.');
-      return;
-    }
-  
     // Check file size (max 50MB for free tier)
     const maxSize = 50 * 1024 * 1024; // 50MB
     if (file.size > maxSize) {
@@ -71,13 +70,12 @@ function UploadDocument() {
       const fileName = sanitizeFileName(file.name);
   
       const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('documents') 
+      .from('submissions') 
       .upload(`${Date.now()}-${sanitizeFileName(file.name)}`, file);
 
-  
       if (uploadError) {
-        setMessage('Upload failed.');
-        console.error('Error uploading file:', uploadError.message);
+        setMessage('Submission failed.');
+        console.error('Error submitting file:', uploadError.message);
         console.log('File MIME type:', file.type);
         console.log('File size in bytes:', file.size);
         setUploading(false);
@@ -85,12 +83,12 @@ function UploadDocument() {
       }
   
       const { error: dbError } = await supabase
-        .from('DOCUMENTS')
+        .from('SUBMISSIONS')
         .insert([
           {
-            Title: title,
             FileName: fileName,
             project_id: projectId,
+            user_id: loggedInUser.id,
           },
         ]);
   
@@ -98,13 +96,13 @@ function UploadDocument() {
         setMessage('Failed to save file metadata.');
         console.error('Error saving file metadata:', dbError.message);
       } else {
-        setMessage('File uploaded successfully!');
-        console.log('File uploaded:', uploadData);
+        setMessage('File submitted successfully!');
+        console.log('File submitted:', uploadData);
         setTimeout(() => navigate(`/courses/${courseId}/projects/${projectId}`), 2000);
       }
   
     } catch (error) {
-      setMessage('An unexpected error occurred during upload.');
+      setMessage('An unexpected error occurred during submission.');
       console.error('Error:', error.message);
     } finally {
       setUploading(false);
@@ -113,15 +111,13 @@ function UploadDocument() {
 
   return (
     <TemplatePage>
-      <div className="upload-document-container"> 
+      <div className="submit-assignment-container"> 
         {project && <h2>{project.name}</h2>}
         {fetchError && <p>{fetchError}</p>}
-        <h3>Title</h3>
-        <input type="text" value={title} onChange={handleTitleChange} /> 
-        <h3>Upload Document</h3>
+        <h3>Submit Assignment</h3>
         <input type="file" onChange={handleFileChange} />
         <button onClick={handleUpload} disabled={uploading}>
-          {uploading ? 'Uploading...' : 'Upload Document'}
+          {uploading ? 'Submitting' : 'Submit Assignment'}
         </button>
         {message && <p>{message}</p>}
       </div>
@@ -129,4 +125,4 @@ function UploadDocument() {
   );
 }
 
-export default UploadDocument;
+export default SubmitAssignment;
