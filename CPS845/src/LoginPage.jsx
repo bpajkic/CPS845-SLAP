@@ -6,19 +6,19 @@ import "./main.css";
 import supabase from "../supabaseClient";
 
 function LoginPage() {
-  //Fetching Users
+  // Fetching Users
   const [fetchError, setFetchError] = useState(null);
   const [users, setUsers] = useState(null);
-  
+
   useEffect(() => {
     const fetchUsers = async () => {
       const { data, error } = await supabase
-        .from("USERS") //Name of table
+        .from("USERS") // Name of table
         .select();
 
       if (error) {
         setFetchError("Could not fetch users");
-        setUsers(null); // setsUsers to null if error occured incase it had data from before
+        setUsers(null); // Set users to null if error occurred in case it had data from before
         console.log(error);
       }
       if (data) {
@@ -29,41 +29,51 @@ function LoginPage() {
 
     fetchUsers();
   }, []);
-  //Fetching Users End
+  // Fetching Users End
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const[message,setMessage] = useState('');
-  const[error,setError] = useState('');
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const [showEmailInput, setShowEmailInput] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
-
 
   const handleLogin = async () => {
     if (!username || !password) {
       alert("Please enter both username and password.");
       return;
     }
-  
+
     try {
+      console.log("Attempting login with:");
+      console.log("Username:", username.trim());
+      console.log("Password:", password.trim());
+
       const { data, error } = await supabase
         .from("USERS")
-        .select("id, EMAIL, USER_NAME, FIRST_NAME, LAST_NAME")
-        .eq("USER_NAME", username)
-        .eq("PASSWORD", password)
+        .select("id, EMAIL, USER_NAME, FIRST_NAME, LAST_NAME, PASSWORD")
+        .eq("USER_NAME", username.trim())
+        .eq("PASSWORD", password.trim())
         .single();
-  
-      if (error || !data) {
+
+      if (error) {
+        console.error("Supabase error:", error);
         setError("Invalid username or password. Please try again.");
-        console.error("Login error:", error);
+      } else if (!data) {
+        console.log("No user found with the given credentials.");
+        setError("Invalid username or password. Please try again.");
       } else {
+        console.log("Login successful:", data);
         setError("");
         const fullName = `${data.FIRST_NAME} ${data.LAST_NAME}`;
-  
+
         // Store the logged-in user's email in localStorage
-        localStorage.setItem("loggedInUser", JSON.stringify({ id: data.id, fullName, email: data.EMAIL}));
-  
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify({ id: data.id, fullName, email: data.EMAIL })
+        );
+
         // Navigate to the homepage
         navigate("/home");
       }
@@ -74,65 +84,61 @@ function LoginPage() {
   };
 
   const handleForgotPasswordClick = () => {
-    // Show the username input field
+    // Show the email input field
     setShowEmailInput(true);
-    setMessage('');
-    setError('');
+    setMessage("");
+    setError("");
   };
 
   const handleSendRequest = async (e) => {
     e.preventDefault();
-    setMessage('');
-    setError('');
+    setMessage("");
+    setError("");
 
     try {
-      // Query Supabase to check if the username exists
+      // Query Supabase to check if the email exists
       const { data, error } = await supabase
-        .from('USERS')
-        .select('id')  // Fetch only the ID field to verify existence
-        .eq('EMAIL', email)
+        .from("USERS")
+        .select("id") // Fetch only the ID field to verify existence
+        .eq("EMAIL", email.trim())
         .single();
 
       if (error || !data) {
-        setError('Email does not exist.');
+        setError("Email does not exist.");
       } else {
-        setMessage('Email is valid. Request sent to admin!');
+        setMessage("Email is valid. Request sent to admin!");
         setShowEmailInput(false);
       }
     } catch (err) {
-      console.error('Error verifying email:', err);
-      setError('An error occurred while checking the email. Please try again.');
+      console.error("Error verifying email:", err);
+      setError("An error occurred while checking the email. Please try again.");
     }
   };
-
-
-
 
   return (
     <div>
       <div>
-        <b>
-          Account Examples:
-        </b>
-        {users && <table>
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Password</th>
-              <th>Account Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.USER_NAME}</td>
-                <td>{user.PASSWORD}</td>
-                <td>{user.ACCOUNT_TYPE}</td>
+        <b>Account Examples:</b>
+        {users && (
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Account Type</th>
               </tr>
-            ))}
-          </tbody>
-        </table>}
-        
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.USER_NAME}</td>
+                  <td>{user.PASSWORD}</td>
+                  <td>{user.ACCOUNT_TYPE}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       <h1>SLAP</h1>
@@ -152,25 +158,25 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Login</button>
-        {!showEmailInput  && (<button onClick={handleForgotPasswordClick}>Forgot Password</button>)}
-        {showEmailInput  && (
-        <form onSubmit={handleSendRequest}>
-          <label>
-            Enter your email:
-            <input
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </label>
-          <button type="submit">Send Request</button>
-        </form>)}
-        {message && <p style={{ color: 'green' }}>{message}</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-
-        
-         
+        {!showEmailInput && (
+          <button onClick={handleForgotPasswordClick}>Forgot Password</button>
+        )}
+        {showEmailInput && (
+          <form onSubmit={handleSendRequest}>
+            <label>
+              Enter your email:
+              <input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </label>
+            <button type="submit">Send Request</button>
+          </form>
+        )}
+        {message && <p style={{ color: "green" }}>{message}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
     </div>
   );
