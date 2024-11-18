@@ -265,7 +265,7 @@ h2, h4 {
     margin: 0;
   }
   
-  .course-page, .course-projects-page, .project-instructions, .evaluations-page, .submissions-page, .view-courses-container, .create-slap-container, .create-project-container, .edit-project-container, .upload-document-container, .submit-assignment-container {
+  .course-page, .course-projects-page, .project-instructions, .evaluations-page, .submissions-page, .view-courses-container, .create-slap-container, .create-project-container, .edit-project-container, .upload-document-container, .submit-assignment-container, .submit-evaluations-container {
     padding: 20px;
     max-width: 800px;
     margin: 0 auto;
@@ -481,7 +481,7 @@ textarea {
   font-weight: bold;
 }
 
-.create-slap-container button, .create-project-container button, .project-instructions button, .edit-project-container button, .upload-document-container button, .submit-assignment-container button {
+.create-slap-container button, .create-project-container button, .project-instructions button, .edit-project-container button, .upload-document-container button, .submit-assignment-container button, .submit-evaluations-container button {
   background-color: #0d3b66;
   color: white;
   padding: 10px;
@@ -490,11 +490,18 @@ textarea {
   margin-right: 10px;
 }
 
-.create-slap-container button:hover, .create-project-container button:hover, .project-instructions button:hover, .edit-project-container button:hover, .upload-document-container button:hover, .submit-assignment-container button:hover {
+.submissions-page button {
+  background-color: #0d3b66;
+  color: white;
+  padding: 10px;
+  border: none;
+}
+
+.create-slap-container button:hover, .create-project-container button:hover, .project-instructions button:hover, .edit-project-container button:hover, .upload-document-container button:hover, .submit-assignment-container button:hover, .submit-evaluations-container button:hover, .submissions-page button:hover {
   background-color: #111d4a;
 }
 
-.create-slap-container input, .create-slapcontainer textarea, .create-project-container input, .create-project-container textarea {
+.create-slap-container input, .create-slapcontainer textarea, .create-project-container input, .create-project-container textarea, .submit-evaluations-container input, .submit-evaluations-container textarea {
   width: 100%;
   padding: 10px;
   margin: 8px 0;
@@ -517,7 +524,7 @@ th {
   background-color: #f2f2f2; /* Optional: adds background color to headers */
 }
 
-.edit, .upload {
+.edit, .upload, .submit, .evaluate {
   color: white;
   text-decoration: none;
 }

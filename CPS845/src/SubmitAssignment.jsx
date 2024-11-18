@@ -67,11 +67,11 @@ function SubmitAssignment() {
         return fileName.replace(/[^a-zA-Z0-9.-_]/g, '_');
       };
   
-      const fileName = sanitizeFileName(file.name);
+      const fileName = `${Date.now()}-${sanitizeFileName(file.name)}`;
   
       const { data: uploadData, error: uploadError } = await supabase.storage
       .from('submissions') 
-      .upload(`${Date.now()}-${sanitizeFileName(file.name)}`, file);
+      .upload(fileName, file);
 
       if (uploadError) {
         setMessage('Submission failed.');

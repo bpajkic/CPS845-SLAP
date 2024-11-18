@@ -16,6 +16,7 @@ import EditProject from './EditProject';
 import UploadDocument from './UploadDocument';
 import SubmitAssignment from './SubmitAssignment';
 import SLAPDetails from './SLAPDetails';
+import SubmitEvaluation from './SubmitEvaluation';
 import Admin from './Admin';
 import ResetPassword from './ResetPassword';
 import SendMessage from './sendMessage';
@@ -40,6 +41,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/courses/:id/projects/:project_id/UploadDocument" element={<UploadDocument />} />
         <Route path="/courses/:id/projects/:project_id/SubmitAssignment" element={<SubmitAssignment />} />
         <Route path="/courses/:id/submissions" element={<CourseSubmissionsPage />} />
+        <Route path="/courses/:id/submissions/:submission_id/SubmitEvaluation" element={<SubmitEvaluation />} />
         <Route path="/courses/:id/evaluations" element={<CourseEvaluationsPage />} />
         <Route path="/slaps/:id" element={<SLAPDetails />} />
         <Route path="/admin" element={<Admin />} />
