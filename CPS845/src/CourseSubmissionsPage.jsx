@@ -11,7 +11,7 @@ function CourseSubmissionsPage() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Fetch the logged-in user details from localStorage or Supabase session
+    // Fetch the logged-in user details from localStorage
     const fetchUser = async () => {
       const userData = JSON.parse(localStorage.getItem("loggedInUser"));
 
@@ -21,6 +21,7 @@ function CourseSubmissionsPage() {
       }
 
       setUser(userData);
+      console.log("User data loaded:", userData);
     };
 
     fetchUser();
@@ -35,12 +36,13 @@ function CourseSubmissionsPage() {
           .from("SUBMISSIONS")
           .select("id, created_at, FileName, user_id, project_id");
 
-        // If the user is a student, fetch only their submissions
-        if (user.accountType === "student") {
-          query = query.eq("user_id", user.id);
+        // Fetch based on user account type
+        if (user.ACCOUNT_TYPE === "student") {
+          console.log("Fetching submissions for student:", user.id);
+          query = query.eq("user_id", user.id); // Students can only see their submissions
         } else {
-          // Admin, professor, or teaching assistant can view all submissions for the project
-          query = query.eq("project_id", id);
+          console.log("Fetching all submissions for project:", id);
+          query = query.eq("project_id", id); // Others can see all project submissions
         }
 
         const { data, error } = await query;
@@ -50,7 +52,15 @@ function CourseSubmissionsPage() {
         }
 
         if (data) {
-          setSubmissions(data);
+          console.log("Submissions fetched:", data);
+
+          // Additional filtering in case Supabase RLS is unavailable
+          const filteredSubmissions =
+            user.ACCOUNT_TYPE === "student"
+              ? data.filter((submission) => submission.user_id === user.id)
+              : data;
+
+          setSubmissions(filteredSubmissions);
           setFetchError(null);
         }
       } catch (error) {
