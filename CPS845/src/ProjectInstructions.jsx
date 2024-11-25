@@ -92,7 +92,7 @@ function ProjectInstructions() {
             {documents.map((doc) => (
               <li key={doc.id}>
                 <a 
-                  href={`https://<YOUR_SUPABASE_URL>.supabase.co/storage/v1/object/public/documents/${doc.FileName}`}
+                  href={`https://iymtqfvemlkysjgrwdnf.supabase.co/storage/v1/object/public/documents/${doc.FileName}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
