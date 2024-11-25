@@ -3,11 +3,11 @@
 **Project Name:** Student Learning Access Portal Interface (SLAP)
 
 **Team Members:** 
-Bosko Pajkic (bpajkic@torontomu.ca) - 501017634
-Iman Qureshi (i1qureshi@torontomu.ca) - 501090599
-Dharshini Thirumal (dharshini.thirumal@torontomu.ca) - 501092270
-Karen Loac (karen.loac@torontomu.ca) - 501099937
-Irmak Yalcin (ayalcin@torontomu.ca) - 500886985
+- Bosko Pajkic (bpajkic@torontomu.ca) - 501017634
+- Iman Qureshi (i1qureshi@torontomu.ca) - 501090599
+- Dharshini Thirumal (dharshini.thirumal@torontomu.ca) - 501092270
+- Karen Loac (karen.loac@torontomu.ca) - 501099937
+- Irmak Yalcin (ayalcin@torontomu.ca) - 500886985
 
 **Project Description** 
 This project aims to enhance the management of university courses by facilitating assignment submissions for students, and communication and coordination between students and their professors.
