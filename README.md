@@ -29,7 +29,7 @@ The following features are implemented:
 - Run the application: npm run dev
 
 **Technologies Used:** 
-Front-end: React.js, CSS
-Back-end: Javascript
-Database: Supabase
-Version Control: Git, GitHub
+- Front-end: React.js, CSS
+- Back-end: Javascript
+- Database: Supabase
+- Version Control: Git, GitHub
